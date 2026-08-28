@@ -1,3 +1,5 @@
+import { ENV } from "@/helpers"
+import { useUserStore } from "@/stores/user"
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -11,6 +13,7 @@ const router = createRouter({
       path: '/auth',
       name: 'auth-layout',
       component: () => import('@/views/layouts/AuthLayout.vue'),
+      meta: { requiresNotAuth: true },
       redirect: { name: 'sign-in' },
       children: [
         {
@@ -32,10 +35,32 @@ const router = createRouter({
     },
     {
       path: '/admin',
-      name:'dashboard-layout',
-      component:()=>import('@/views/layouts/DashboardLayout.vue')
-    }
+      name: 'dashboard-layout',
+      meta: { requiresAuth: true },
+      component: () => import('@/views/layouts/DashboardLayout.vue'),
+    },
   ],
 })
+
+router.beforeEach(async (to) => {
+  if (to.meta.requiresAuth && !(await isAuthenticated())) {
+    localStorage.removeItem(ENV.TOKEN)
+    return { name: 'sign-in', replace: true }
+  } else if (to.meta.requiresNotAuth && (await isAuthenticated())) {
+    return { name: 'dashboard-layout', replace: true }
+  }
+
+  return
+})
+
+async function isAuthenticated(): Promise<boolean> {
+  try {
+    const authStore = useUserStore()
+    await authStore.checkAuth()
+    return authStore.isAuthenticated
+  } catch {
+    return false
+  }
+}
 
 export default router
