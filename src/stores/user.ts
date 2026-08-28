@@ -8,7 +8,7 @@ import { UserAction } from '@/business/actions'
 import { ENV } from '@/helpers'
 
 export const useUserStore = defineStore('user', () => {
-  const user = ref<UserGetProfileResponse>(UserValue.userGetProfile)
+  const user = ref<UserGetProfileResponse>(UserValue.getProfile)
   const isAuthenticated = ref<boolean>(false)
 
   const checkAuth = async (): Promise<void> => {
@@ -25,7 +25,7 @@ export const useUserStore = defineStore('user', () => {
   }
 
   const logout = () => {
-    user.value = UserValue.userGetProfile
+    user.value = UserValue.getProfile
     isAuthenticated.value = false
     localStorage.removeItem(ENV.TOKEN)
   }
