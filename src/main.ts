@@ -31,15 +31,18 @@ import {
   faBagShopping,
   faBoxesStacked,
   faChevronRight,
-  faChevronDown,
   faUser,
   faHeading,
   faImage,
   faShareNodes,
-  faFloppyDisk,
   faCloudArrowUp,
-  faImages
-
+  faImages,
+  faSync,
+  faPlus,
+  faTrash,
+  faMagnifyingGlass,
+  faChevronDown,
+  faFloppyDisk,
 } from '@fortawesome/free-solid-svg-icons'
 // 2. Importa los iconos de marcas ('fab' para redes sociales)
 import { faInstagram, faFacebook, faTiktok } from '@fortawesome/free-brands-svg-icons'
@@ -75,7 +78,11 @@ library.add(
   faShareNodes,
   faFloppyDisk,
   faCloudArrowUp,
-  faImages
+  faImages,
+  faMagnifyingGlass,
+  faSync,
+  faPlus,
+  faTrash,
 )
 
 const app = createApp(App)
