@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.3.1",
+    "@fortawesome/free-brands-svg-icons": "^7.3.1",
     "@fortawesome/free-regular-svg-icons": "^7.3.1",
     "@fortawesome/free-solid-svg-icons": "^7.3.1",
     "@fortawesome/vue-fontawesome": "^3.3.3",
@@ -23,6 +24,7 @@
     "@tanstack/vue-query": "^5.102.8",
     "@tanstack/vue-query-devtools": "^6.1.48",
     "@vee-validate/zod": "^4.15.1",
+    "@vueup/vue-quill": "^1.5.5",
     "axios": "^1.20.0",
     "pinia": "^4.0.2",
     "sweetalert2": "^11.26.25",

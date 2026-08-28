@@ -1,18 +1,16 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { ref } from 'vue'
-
 defineProps<{
   isOpen: boolean
 }>()
 
 defineEmits(['close'])
 
-const isCatalogOpen = ref(true)
+// const isCatalogOpen = ref(true)
 
-const toggleCatalog = () => {
-  isCatalogOpen.value = !isCatalogOpen.value
-}
+// const toggleCatalog = () => {
+//   isCatalogOpen.value = !isCatalogOpen.value
+// }
 </script>
 
 <template>
@@ -48,22 +46,62 @@ const toggleCatalog = () => {
       <div class="p-4 space-y-2 overflow-y-auto h-[calc(100vh-8rem)] text-sm">
         <div class="space-y-1">
           <!-- Menú normal: Menu -->
-          <!-- <router-link
-            :to="{ name: 'menu' }"
+           <router-link
+            :to="{ name: 'start' }"
             class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
-            active-class="!bg-emerald-100 dark:!bg-emerald-900/40 !text-emerald-700 dark:!text-emerald-300 !font-semibold"
+            exact-active-class="!bg-emerald-100 dark:!bg-emerald-900/40 !text-emerald-700 dark:!text-emerald-300 !font-semibold"
           >
-            <font-awesome-icon icon="pen-to-square" /> Menu
-          </router-link> -->
+            <font-awesome-icon icon="tags" /> Inicio
+          </router-link>
 
           <!-- Menú normal: Banner -->
-          <!-- <router-link
-            :to="{ name: 'banner' }"
+          <router-link
+            :to="{ name: 'aron' }"
             class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
-            active-class="!bg-emerald-100 dark:!bg-emerald-900/40 !text-emerald-700 dark:!text-emerald-300 !font-semibold"
+            exact-active-class="!bg-emerald-100 dark:!bg-emerald-900/40 !text-emerald-700 dark:!text-emerald-300 !font-semibold"
           >
-            <font-awesome-icon icon="tags" /> Banner
-          </router-link> -->
+            <font-awesome-icon icon="pen-to-square" /> Aron
+          </router-link>
+
+          <router-link
+            :to="{ name: 'services' }"
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+            exact-active-class="!bg-emerald-100 dark:!bg-emerald-900/40 !text-emerald-700 dark:!text-emerald-300 !font-semibold"
+          >
+            <font-awesome-icon icon="square-check" /> Servicios
+          </router-link>
+
+          <router-link
+            :to="{ name: 'models' }"
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+            exact-active-class="!bg-emerald-100 dark:!bg-emerald-900/40 !text-emerald-700 dark:!text-emerald-300 !font-semibold"
+          >
+            <font-awesome-icon  icon="xmark" /> Modelos
+          </router-link>
+
+          <router-link
+            :to="{ name: 'events' }"
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+            exact-active-class="!bg-emerald-100 dark:!bg-emerald-900/40 !text-emerald-700 dark:!text-emerald-300 !font-semibold"
+          >
+            <font-awesome-icon icon="bag-shopping" /> Eventos
+          </router-link>
+
+          <router-link
+            :to="{ name: 'packages' }"
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+            exact-active-class="!bg-emerald-100 dark:!bg-emerald-900/40 !text-emerald-700 dark:!text-emerald-300 !font-semibold"
+          >
+            <font-awesome-icon icon="sun" /> Paquetes
+          </router-link>
+
+          <router-link
+            :to="{ name: 'contact' }"
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+            exact-active-class="!bg-emerald-100 dark:!bg-emerald-900/40 !text-emerald-700 dark:!text-emerald-300 !font-semibold"
+          >
+            <font-awesome-icon icon="boxes-stacked" /> Contacto
+          </router-link>
 
           <!-- Menú normal: How to order -->
           <!-- <router-link
@@ -75,45 +113,6 @@ const toggleCatalog = () => {
           </router-link> -->
 
           <!-- Menú Padre: Catalog -->
-          <div class="pt-1">
-            <button
-              @click="toggleCatalog"
-              class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
-            >
-              <div class="flex items-center gap-3">
-                <font-awesome-icon icon="bag-shopping" /> Catalog
-              </div>
-              <font-awesome-icon
-                icon="chevron-right"
-                class="text-xs transition-transform duration-200"
-                :class="{ 'rotate-90': isCatalogOpen }"
-              />
-            </button>
-
-            <!-- Submenús Hijos con línea de contorno estructurada forzada -->
-            <div
-              v-show="isCatalogOpen"
-              class="ml-6 pl-4 space-y-1 mt-1 border-l-2 border-slate-300 dark:border-slate-600 block"
-            >
-              <!-- Hijo 1: Catalog section -->
-              <!-- <router-link
-                :to="{ name: 'catalog-section' }"
-                class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition text-xs"
-                active-class="!bg-emerald-100 dark:!bg-emerald-900/40 !text-emerald-700 dark:!text-emerald-300 !font-semibold"
-              >
-                <font-awesome-icon icon="sun" /> Catalog section
-              </router-link> -->
-
-              <!-- Hijo 2: Product -->
-              <!-- <router-link
-                :to="{ name: 'catalog-item' }"
-                class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition text-xs"
-                active-class="!bg-emerald-100 dark:!bg-emerald-900/40 !text-emerald-700 dark:!text-emerald-300 !font-semibold"
-              >
-                <font-awesome-icon icon="boxes-stacked" /> Product
-              </router-link> -->
-            </div>
-          </div>
 
           <!-- <router-link
             :to="{ name: 'review-opinion' }"
@@ -122,7 +121,6 @@ const toggleCatalog = () => {
           >
              <font-awesome-icon icon="square-check" /> Review Opinion
           </router-link> -->
-
         </div>
       </div>
     </div>

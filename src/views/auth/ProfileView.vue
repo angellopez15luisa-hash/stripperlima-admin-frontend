@@ -56,8 +56,7 @@ const disabled = computed(() => isPending.value || !meta.value.valid)
 </script>
 
 <template>
-  <div class="p-6 md:p-8 max-w-3xl space-y-8">
-    <!-- Encabezado de la página -->
+  <div class="p-6 md:p-8 max-w-5xl mx-auto space-y-8">
     <div class="border-b border-slate-200 dark:border-slate-800 pb-5">
       <h1 class="text-xl font-bold text-slate-900 dark:text-white">Configuración de Perfil</h1>
       <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
@@ -65,7 +64,6 @@ const disabled = computed(() => isPending.value || !meta.value.valid)
       </p>
     </div>
 
-    <!-- Sección de Información General -->
     <div class="space-y-4">
       <h2 class="text-sm font-semibold text-slate-800 dark:text-slate-200 uppercase tracking-wider">
         Información de la Cuenta
@@ -89,7 +87,6 @@ const disabled = computed(() => isPending.value || !meta.value.valid)
       </div>
     </div>
 
-    <!-- Sección de Seguridad -->
     <div class="space-y-4">
       <div class="border-b border-slate-200 dark:border-slate-800 pb-2">
         <h2
@@ -106,7 +103,6 @@ const disabled = computed(() => isPending.value || !meta.value.valid)
         @submit.prevent="onSubmit"
         class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-sm space-y-4"
       >
-        <!-- Título interno de la tarjeta para la acción de contraseña -->
         <div class="border-b border-slate-100 dark:border-slate-800 pb-3 mb-4">
           <h3 class="text-base font-bold text-slate-900 dark:text-white">Actualizar Contraseña</h3>
           <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -114,7 +110,6 @@ const disabled = computed(() => isPending.value || !meta.value.valid)
           </p>
         </div>
 
-        <!-- Contraseña Actual -->
         <div>
           <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1"
             >Contraseña Actual</label
@@ -132,7 +127,6 @@ const disabled = computed(() => isPending.value || !meta.value.valid)
           }}</span>
         </div>
 
-        <!-- Nueva Contraseña -->
         <div>
           <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1"
             >Nueva Contraseña</label
@@ -149,7 +143,6 @@ const disabled = computed(() => isPending.value || !meta.value.valid)
           }}</span>
         </div>
 
-        <!-- Confirmar Nueva Contraseña -->
         <div>
           <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1"
             >Confirmar Nueva Contraseña</label
@@ -166,7 +159,6 @@ const disabled = computed(() => isPending.value || !meta.value.valid)
           }}</span>
         </div>
 
-        <!-- Botón de Acción -->
         <div class="flex justify-end pt-4 border-t border-slate-100 dark:border-slate-800">
           <button
             type="submit"

@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { useUserStore } from "@/stores/user"
+import { useUserStore } from '@/stores/user'
 import { useQueryClient } from '@tanstack/vue-query'
 import Swal from 'sweetalert2'
 import { ref, onMounted, onUnmounted } from 'vue'
@@ -129,7 +129,9 @@ const handleLogout = () => {
           class="flex items-center gap-2.5 focus:outline-none cursor-pointer p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition"
         >
           <!-- Avatar con iniciales o imagen -->
-          <div class="w-9 h-9 rounded-full bg-emerald-600 text-white font-semibold flex items-center justify-center text-sm shadow-inner uppercase">
+          <div
+            class="w-9 h-9 rounded-full bg-emerald-600 text-white font-semibold flex items-center justify-center text-sm shadow-inner uppercase"
+          >
             {{ userStore.user.name ? userStore.user.name.charAt(0) : 'A' }}
           </div>
           <!-- Nombre y flechita -->
@@ -137,11 +139,12 @@ const handleLogout = () => {
             <span class="text-xs font-semibold text-slate-800 dark:text-slate-100 tracking-wide">
               {{ userStore.user.name }}
             </span>
-            <span class="text-[11px] text-slate-400 dark:text-slate-400 font-normal">
-              Admin
-            </span>
+            <span class="text-[11px] text-slate-400 dark:text-slate-400 font-normal"> Admin </span>
           </div>
-          <font-awesome-icon icon="chevron-down" class="text-[10px] text-slate-400 hidden lg:inline ml-1" />
+          <font-awesome-icon
+            icon="chevron-down"
+            class="text-[10px] text-slate-400 hidden lg:inline ml-1"
+          />
         </button>
 
         <!-- Menú Desplegable (Dropdown) estilo Pro -->

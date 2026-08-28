@@ -37,12 +37,48 @@ const router = createRouter({
       path: '/admin',
       name: 'dashboard-layout',
       meta: { requiresAuth: true },
+      redirect: {name:'start'},
       component: () => import('@/views/layouts/DashboardLayout.vue'),
       children: [
         {
           path: 'profile',
           name: 'profile',
           component: () => import('@/views/auth/ProfileView.vue'),
+        },
+        {
+          path: '',
+          name: 'start',
+          component: () => import('@/views/admin/StartView.vue'),
+        },
+        {
+          path: 'aron',
+          name: 'aron',
+          component: () => import('@/views/admin/AronView.vue'),
+        },
+        {
+          path: 'servicios',
+          name: 'services',
+          component: () => import('@/views/admin/ServicesView.vue'),
+        },
+        {
+          path: 'modelos',
+          name: 'models',
+          component: () => import('@/views/admin/ModelsView.vue'),
+        },
+        {
+          path: 'eventos',
+          name: 'events',
+          component: () => import('@/views/admin/EventsView.vue'),
+        },
+        {
+          path: 'paquetes',
+          name: 'packages',
+          component: () => import('@/views/admin/PackagesView.vue'),
+        },
+        {
+          path: 'contacto',
+          name: 'contact',
+          component: () => import('@/views/admin/ContactView.vue'),
         },
       ],
     },
