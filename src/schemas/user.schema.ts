@@ -72,3 +72,37 @@ export const userResetPasswordSchema = userSchema
     message: '* Los passwords no coinciden',
     path: ['confirmPassword'],
   })
+
+export const userResetPasswordFormDataSchema = userSchema
+  .pick({
+    token: true,
+  })
+  .extend({
+    data: z.object({
+      ...userSchema.pick({
+        newPassword: true,
+      }).shape,
+    }),
+  })
+
+export const userGetProfileResponseDataSchema = messageResponseSchema
+  .omit({
+    message: true,
+  })
+  .extend({
+    user: z.object({
+      ...userSchema.pick({
+        id: true,
+        name:true,
+        email: true,
+        role: true,
+      }).shape,
+    }),
+  })
+
+export const userGetProfileResponseSchema = userSchema.pick({
+  id: true,
+  name:true,
+  email: true,
+  role:true
+  })

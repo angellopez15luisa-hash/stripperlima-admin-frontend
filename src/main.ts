@@ -11,6 +11,53 @@ import 'vue3-toastify/dist/index.css'
 import { VueQueryPlugin, QueryClient } from '@tanstack/vue-query'
 import { VueQueryDevtools } from '@tanstack/vue-query-devtools'
 
+/* --- FontAwesome --- */
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import {
+  faBars,
+  faSearch,
+  faSun,
+  faMoon,
+  faBell,
+  faCheck,
+  faLayerGroup,
+  faPenToSquare,
+  faTags,
+  faSquareCheck,
+  faUpload,
+  faArrowRightFromBracket,
+  faXmark,
+  faBagShopping,
+  faBoxesStacked,
+  faChevronRight,
+  faChevronDown
+} from '@fortawesome/free-solid-svg-icons'
+import { faBell as faRegularBell } from '@fortawesome/free-regular-svg-icons'
+
+// Añadimos los iconos que usamos en el layout, sidebar y header
+library.add(
+  faBars,
+  faSearch,
+  faSun,
+  faMoon,
+  faBell,
+  faCheck,
+  faLayerGroup,
+  faPenToSquare,
+  faTags,
+  faSquareCheck,
+  faUpload,
+  faArrowRightFromBracket,
+  faXmark,
+  faRegularBell,
+  faBagShopping,
+  faBoxesStacked,
+  faChevronRight,
+  faChevronDown
+)
+
+
 const app = createApp(App)
 
 // Crea una instancia del cliente de Vue Query
@@ -30,6 +77,8 @@ app.use(Vue3Toastify, {
 
   // ...
 } as ToastContainerOptions)
+// Registramos el componente globalmente
+app.component('font-awesome-icon', FontAwesomeIcon)
 
 app.use(createPinia())
 app.use(router)

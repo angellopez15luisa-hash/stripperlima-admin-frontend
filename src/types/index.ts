@@ -6,4 +6,6 @@ export type {
   UserForgotPasswordForm,
   UserResetPasswordForm,
   UserResetPasswordFormData,
+  UserGetProfileResponse,
+  UserGetProfileResponseData
 } from './user.type'

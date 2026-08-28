@@ -30,6 +30,11 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: '/admin',
+      name:'dashboard-layout',
+      component:()=>import('@/views/layouts/DashboardLayout.vue')
+    }
   ],
 })
 

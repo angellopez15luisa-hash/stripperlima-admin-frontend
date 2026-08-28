@@ -2,13 +2,17 @@ import type {
   MessageResponse,
   User,
   UserForgotPasswordForm,
+  UserGetProfileResponse,
   UserResetPasswordFormData,
   UserSignInForm,
 } from '@/types'
 import { isAxiosError } from 'axios'
 import { UserApi } from '../apis'
 import { ENV } from '@/helpers'
-import { userSignInResponseDataSchema } from '@/schemas/user.schema'
+import {
+  userGetProfileResponseDataSchema,
+  userSignInResponseDataSchema,
+} from '@/schemas/user.schema'
 import { messageResponseSchema } from '@/schemas'
 
 export class UserService {
@@ -64,6 +68,21 @@ export class UserService {
       if (!response.success)
         throw new Error('La respuesta del servidor no tiene el formato esperado')
       return response.data
+    } catch (error) {
+      if (isAxiosError(error) && error.response) {
+        throw new Error(error.response.data.message)
+      }
+      throw error
+    }
+  }
+
+  static getProfile = async (): Promise<UserGetProfileResponse> => {
+    try {
+      const { data } = await UserApi.getProfile()
+      const response = userGetProfileResponseDataSchema.safeParse(data)
+      if (!response.success)
+        throw new Error('La respuesta del servidor no tiene el formato esperado')
+      return response.data.user
     } catch (error) {
       if (isAxiosError(error) && error.response) {
         throw new Error(error.response.data.message)

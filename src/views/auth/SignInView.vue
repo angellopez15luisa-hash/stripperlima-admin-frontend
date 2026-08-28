@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { UserAction } from '@/business/actions'
+import router from '@/router'
 import { userSignInSchema } from '@/schemas'
 import { UserValue } from '@/values'
 import { useMutation } from '@tanstack/vue-query'
@@ -26,12 +27,12 @@ const [password, passwordAttrs] = defineField('password')
 
 const { mutate, isPending } = useMutation({
   mutationFn: UserAction.signIn,
-  onSuccess: () => {
+  onSuccess: async () => {
     resetForm()
     setTimeout(() => {
       textEmailInputRef.value?.focus()
     }, 600)
-    toast.success('todo bien')
+    await router.replace({ name: 'dashboard-layout' })
   },
   onError: (error) => {
     toast.error(error.message)

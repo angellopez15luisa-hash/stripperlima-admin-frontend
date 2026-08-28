@@ -15,4 +15,6 @@ export class UserAction {
 
   static resetPassword = (formData: UserResetPasswordFormData) =>
     UserService.resetPassword(formData)
+
+  static getProfile = () => UserService.getProfile()
 }

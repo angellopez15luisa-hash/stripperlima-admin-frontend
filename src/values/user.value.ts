@@ -1,4 +1,9 @@
-import type { UserForgotPasswordForm, UserResetPasswordForm, UserSignInForm } from '@/types'
+import type {
+  UserForgotPasswordForm,
+  UserGetProfileResponse,
+  UserResetPasswordForm,
+  UserSignInForm,
+} from '@/types'
 
 export class UserValue {
   static signInForm: UserSignInForm = {
@@ -12,5 +17,11 @@ export class UserValue {
   static resetPasswordForm: UserResetPasswordForm = {
     newPassword: '',
     confirmPassword: '',
+  }
+  static userGetProfile: UserGetProfileResponse = {
+    id: 0,
+    name: '',
+    email: '',
+    role: '',
   }
 }
