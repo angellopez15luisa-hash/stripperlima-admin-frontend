@@ -113,6 +113,7 @@ export const userGetProfileResponseSchema = userSchema.pick({
   role: true,
 })
 
+
 export const userUpdatePasswordSchema = userSchema
   .pick({
     currentPassword: true,
