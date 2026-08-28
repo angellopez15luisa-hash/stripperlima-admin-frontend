@@ -7,7 +7,7 @@ import type {
   UserSignInForm,
   UserSignInResponseData,
 } from '@/types'
-import type { UserGetProfileResponseData } from "@/types/user.type"
+import type { UserGetProfileResponseData, UserUpdatePasswordForm } from '@/types/user.type'
 
 export class UserApi {
   static signIn = (formData: UserSignInForm) =>
@@ -23,4 +23,7 @@ export class UserApi {
     api.post<MessageResponse>(`/users/reset-password/${formData.token}`, formData.data)
 
   static getProfile = () => api.get<UserGetProfileResponseData>(`/users/profile`)
+
+  static updatePassword = (formData: UserUpdatePasswordForm) =>
+    api.post<MessageResponse>(`/users/update-password`, formData)
 }

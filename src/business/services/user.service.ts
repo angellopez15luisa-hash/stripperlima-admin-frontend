@@ -5,6 +5,7 @@ import type {
   UserGetProfileResponse,
   UserResetPasswordFormData,
   UserSignInForm,
+  UserUpdatePasswordForm,
 } from '@/types'
 import { isAxiosError } from 'axios'
 import { UserApi } from '../apis'
@@ -83,6 +84,21 @@ export class UserService {
       if (!response.success)
         throw new Error('La respuesta del servidor no tiene el formato esperado')
       return response.data.user
+    } catch (error) {
+      if (isAxiosError(error) && error.response) {
+        throw new Error(error.response.data.message)
+      }
+      throw error
+    }
+  }
+
+  static updatePassword = async (formData: UserUpdatePasswordForm): Promise<MessageResponse> => {
+    try {
+      const { data } = await UserApi.updatePassword(formData)
+      const response = messageResponseSchema.safeParse(data)
+      if (!response.success)
+        throw new Error('La respuesta del servidor no tiene el formato esperado')
+      return response.data
     } catch (error) {
       if (isAxiosError(error) && error.response) {
         throw new Error(error.response.data.message)

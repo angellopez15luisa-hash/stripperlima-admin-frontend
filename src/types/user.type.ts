@@ -4,7 +4,7 @@ import type {
   userGetProfileResponseDataSchema,
   userGetProfileResponseSchema,
   userResetPasswordFormDataSchema,
-  userSignInResponseDataSchema,
+  userSignInResponseDataSchema
 } from '@/schemas/user.schema'
 
 export type User = z.infer<typeof userSchema>
@@ -22,3 +22,5 @@ export type UserResetPasswordFormData = z.infer<typeof userResetPasswordFormData
 export type UserGetProfileResponseData = z.infer<typeof userGetProfileResponseDataSchema>
 
 export type UserGetProfileResponse = z.infer<typeof userGetProfileResponseSchema>
+
+export type UserUpdatePasswordForm = Pick<User, 'currentPassword' | 'newPassword'>

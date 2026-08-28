@@ -1,5 +1,5 @@
-import { ENV } from "@/helpers"
-import { useUserStore } from "@/stores/user"
+import { ENV } from '@/helpers'
+import { useUserStore } from '@/stores/user'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -38,6 +38,13 @@ const router = createRouter({
       name: 'dashboard-layout',
       meta: { requiresAuth: true },
       component: () => import('@/views/layouts/DashboardLayout.vue'),
+      children: [
+        {
+          path: 'profile',
+          name: 'profile',
+          component: () => import('@/views/auth/ProfileView.vue'),
+        },
+      ],
     },
   ],
 })

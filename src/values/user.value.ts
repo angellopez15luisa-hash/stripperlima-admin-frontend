@@ -1,8 +1,9 @@
 import type {
   UserForgotPasswordForm,
-  UserGetProfileResponse,
+  // UserGetProfileResponse,
   UserResetPasswordForm,
   UserSignInForm,
+  UserUpdatePasswordForm,
 } from '@/types'
 
 export class UserValue {
@@ -18,10 +19,15 @@ export class UserValue {
     newPassword: '',
     confirmPassword: '',
   }
-  static userGetProfile: UserGetProfileResponse = {
-    id: 0,
-    name: '',
-    email: '',
-    role: '',
+  // static getProfile: UserGetProfileResponse = {
+  //   id: 0,
+  //   name: '',
+  //   email: '',
+  //   role: '',
+  // }
+
+  static updatePasswordForm: UserUpdatePasswordForm = {
+    newPassword: '',
+    currentPassword: '',
   }
 }

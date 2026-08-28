@@ -7,5 +7,7 @@ export type {
   UserResetPasswordForm,
   UserResetPasswordFormData,
   UserGetProfileResponse,
-  UserGetProfileResponseData
+  UserGetProfileResponseData,
+  UserUpdatePasswordForm
+
 } from './user.type'

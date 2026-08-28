@@ -41,6 +41,12 @@ export const userSchema = z.object({
       message: '* Debes confirmar tu contraseña',
     })
     .min(1, '* Debes confirmar tu contraseña'),
+  currentPassword: z
+    .string({
+      invalid_type_error: '* El nuevo password debe ser una cadena de texto',
+    })
+    .min(1, { message: '* El new password es obligatorio' })
+    .min(8, 'El password actual debe tener al menos 8 caracteres'),
 })
 
 export const userSignInSchema = userSchema.pick({
@@ -93,7 +99,7 @@ export const userGetProfileResponseDataSchema = messageResponseSchema
     user: z.object({
       ...userSchema.pick({
         id: true,
-        name:true,
+        name: true,
         email: true,
         role: true,
       }).shape,
@@ -102,7 +108,22 @@ export const userGetProfileResponseDataSchema = messageResponseSchema
 
 export const userGetProfileResponseSchema = userSchema.pick({
   id: true,
-  name:true,
+  name: true,
   email: true,
-  role:true
+  role: true,
+})
+
+export const userUpdatePasswordSchema = userSchema
+  .pick({
+    currentPassword: true,
+    newPassword: true,
+    confirmPassword: true,
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: '* Los passwords no coinciden',
+    path: ['confirmPassword'],
+  })
+  .refine((data) => data.currentPassword !== data.newPassword, {
+    message: '* El nuevo password debe ser diferente a la actual',
+    path: ['newPassword'],
   })
