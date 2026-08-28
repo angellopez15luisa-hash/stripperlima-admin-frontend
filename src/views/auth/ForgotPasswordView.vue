@@ -1,52 +1,50 @@
 <script setup lang="ts">
-import { UserAction } from '@/business/actions'
-import { userSignInSchema } from '@/schemas'
+import { computed, onMounted, ref } from 'vue'
+import { configure, useForm } from 'vee-validate'
+import { toTypedSchema } from '@vee-validate/zod'
+import { toast } from 'vue3-toastify'
+import { userForgotPasswordSchema } from '@/schemas/user.schema'
 import { UserValue } from '@/values'
 import { useMutation } from '@tanstack/vue-query'
-import { toTypedSchema } from '@vee-validate/zod'
-import { configure, useForm } from 'vee-validate'
-import { computed, onMounted, ref } from 'vue'
-// import { useRouter } from 'vue-router'
-import { toast } from 'vue3-toastify'
+import { UserAction } from "@/business/actions"
 
 configure({
   validateOnBlur: false,
 })
 
-// const router = useRouter()
 const textEmailInputRef = ref<HTMLInputElement | null>(null)
 
 const { handleSubmit, defineField, errors, resetForm, meta } = useForm({
-  validationSchema: toTypedSchema(userSignInSchema),
-  initialValues: UserValue.signInForm,
+  validationSchema: toTypedSchema(userForgotPasswordSchema),
+  initialValues: UserValue.forgotPasswordForm,
 })
 
 const [email, emailAttrs] = defineField('email')
-const [password, passwordAttrs] = defineField('password')
 
 const { mutate, isPending } = useMutation({
-  mutationFn: UserAction.signIn,
-  onSuccess: () => {
+  mutationFn: UserAction.forgotPassword,
+  onSuccess: (data) => {
+    toast.success(data.message || 'Correo de recuperación enviado con éxito')
     resetForm()
     setTimeout(() => {
       textEmailInputRef.value?.focus()
     }, 600)
-    toast.success('todo bien')
   },
   onError: (error) => {
-    toast.error(error.message)
+    toast.error(error?.message || 'Ocurrió un error al enviar el correo')
   },
 })
 
+// Conectamos el submit con la mutación de TanStack Query pasando el valor del email
 const onSubmit = handleSubmit((values) => {
-  mutate(values)
+   mutate(values)
 })
 
 onMounted(() => {
   textEmailInputRef.value?.focus()
 })
 
-const disabled = computed(() => !meta.value.valid || isPending.value)
+const disabled = computed(() => isPending.value || !meta.value.valid)
 </script>
 
 <template>
@@ -70,72 +68,49 @@ const disabled = computed(() => !meta.value.valid || isPending.value)
       <!-- Encabezado -->
       <div class="text-center mb-8">
         <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
-          Iniciar sesión
+          Recuperar contraseña
         </h1>
         <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-          Te damos la bienvenida — ingresa a tu espacio de trabajo.
+          Ingresa tu correo electrónico y te enviaremos un enlace de recuperación.
         </p>
       </div>
 
       <!-- Formulario -->
-      <form class="space-y-4" @submit.prevent="onSubmit">
-        <!-- Email -->
+      <form @submit.prevent="onSubmit" class="space-y-4">
         <div>
           <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1.5"
-            >Correo electrónico o usuario</label
+            >Correo electrónico</label
           >
           <input
             ref="textEmailInputRef"
             type="email"
             v-model="email"
             v-bind="emailAttrs"
-            placeholder="tucorreo@vireo.io"
+            placeholder="tu@correo.com"
             class="w-full bg-slate-50/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:border-emerald-600 transition-colors"
           />
-
           <span v-if="errors.email" class="text-red-500 text-xs mt-1 block">{{
             errors.email
           }}</span>
         </div>
 
-        <!-- Password -->
-        <div>
-          <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1.5"
-            >Contraseña</label
-          >
-          <input
-            type="password"
-            v-model="password"
-            v-bind="passwordAttrs"
-            placeholder="••••••••"
-            class="w-full bg-slate-50/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:border-emerald-600 transition-colors"
-          />
-
-          <span v-if="errors.password" class="text-red-500 text-xs mt-1 block">{{
-            errors.password
-          }}</span>
-        </div>
-
-        <!-- Botón de Iniciar sesión -->
         <button
           type="submit"
           :disabled="disabled"
           class="w-full mt-2 inline-flex items-center justify-center px-4 py-2.5 rounded-lg text-sm font-medium bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          <span>{{ isPending ? 'Iniciando sesión...' : 'Iniciar sesión' }}</span>
+          <span>{{ isPending ? 'Enviando enlace...' : 'Enviar enlace de recuperación' }}</span>
         </button>
 
-        <!-- Enlace de recuperar contraseña movido al final -->
-        <div class="flex justify-center pt-2">
+        <div class="text-center mt-4">
           <router-link
-            :to="{ name: 'forgot-password' }"
-            class="text-xs font-medium text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline transition-colors"
+            :to="{ name: 'sign-in' }"
+            class="text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-emerald-600 transition-colors"
           >
-            ¿Olvidaste tu contraseña?
+            &larr; Volver al inicio de sesión
           </router-link>
         </div>
       </form>
     </div>
   </div>
 </template>
-<style scoped></style>

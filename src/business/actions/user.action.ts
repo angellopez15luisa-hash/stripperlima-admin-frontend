@@ -1,6 +1,18 @@
-import type { UserSignInForm } from '@/types'
+import type {
+  User,
+  UserForgotPasswordForm,
+  UserResetPasswordFormData,
+  UserSignInForm,
+} from '@/types'
 import { UserService } from '../services'
 
 export class UserAction {
   static signIn = (formData: UserSignInForm) => UserService.signIn(formData)
+
+  static forgotPassword = (formData: UserForgotPasswordForm) => UserService.forgotPassword(formData)
+
+  static verifyResetToken = (token: User['token']) => UserService.verifyResetToken(token)
+
+  static resetPassword = (formData: UserResetPasswordFormData) =>
+    UserService.resetPassword(formData)
 }

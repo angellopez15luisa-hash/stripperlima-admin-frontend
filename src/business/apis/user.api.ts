@@ -1,7 +1,23 @@
 import api from '@/lib/axios'
-import type { UserSignInForm, UserSignInResponseData } from '@/types'
+import type {
+  MessageResponse,
+  User,
+  UserForgotPasswordForm,
+  UserResetPasswordFormData,
+  UserSignInForm,
+  UserSignInResponseData,
+} from '@/types'
 
 export class UserApi {
   static signIn = (formData: UserSignInForm) =>
     api.post<UserSignInResponseData>(`/users/sign-in`, formData)
+
+  static forgotPassword = (formData: UserForgotPasswordForm) =>
+    api.post<MessageResponse>(`/users/forgot-password`, formData)
+
+  static verifyResetToken = (token: User['token']) =>
+    api.get<MessageResponse>(`/users/verify-reset-token/${token}`)
+
+  static resetPassword = (formData: UserResetPasswordFormData) =>
+    api.post<MessageResponse>(`/users/reset-password/${formData.token}`, formData.data)
 }
