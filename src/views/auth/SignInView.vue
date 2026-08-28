@@ -1,7 +1,56 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { UserAction } from '@/business/actions'
+import { signInSchema } from '@/schemas'
+import { UserValue } from '@/values'
+import { useMutation } from '@tanstack/vue-query'
+import { toTypedSchema } from '@vee-validate/zod'
+import { configure, useForm } from 'vee-validate'
+import { computed, onMounted, ref } from 'vue'
+// import { useRouter } from 'vue-router'
+import { toast } from 'vue3-toastify'
+
+configure({
+  validateOnBlur: false,
+})
+
+// const router = useRouter()
+const textEmailInputRef = ref<HTMLInputElement | null>(null)
+
+const { handleSubmit, defineField, errors, resetForm, meta } = useForm({
+  validationSchema: toTypedSchema(signInSchema),
+  initialValues: UserValue.signInForm,
+})
+
+const [email, emailAttrs] = defineField('email')
+const [password, passwordAttrs] = defineField('password')
+
+const { mutate, isPending } = useMutation({
+  mutationFn: UserAction.signIn,
+  onSuccess: () => {
+    resetForm()
+    setTimeout(() => {
+      textEmailInputRef.value?.focus()
+    }, 600)
+    toast.success("todo bien")
+  },
+  onError: (error) => {
+    toast.error(error.message)
+  },
+})
+
+const onSubmit = handleSubmit((values) => {
+  mutate(values)
+})
+
+onMounted(() => {
+  textEmailInputRef.value?.focus()
+})
+
+const disabled = computed(() => !meta.value.valid || isPending.value)
+</script>
 
 <template>
- <div class="w-full max-w-md">
+  <div class="w-full max-w-md">
     <!-- Logo / Marca superior -->
     <div class="flex flex-col items-center mb-6">
       <div
@@ -29,8 +78,7 @@
       </div>
 
       <!-- Formulario -->
-      <form  class="space-y-4">
-        <!-- @submit.prevent="onSubmit" -->
+      <form class="space-y-4" @submit.prevent="onSubmit">
         <!-- Email -->
         <div>
           <label class="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1.5"
@@ -39,15 +87,15 @@
           <input
             ref="textEmailInputRef"
             type="email"
-
+            v-model="email"
+            v-bind="emailAttrs"
             placeholder="tucorreo@vireo.io"
             class="w-full bg-slate-50/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:border-emerald-600 transition-colors"
           />
-          <!-- v-model="email"
-            v-bind="emailAttrs"
+
           <span v-if="errors.email" class="text-red-500 text-xs mt-1 block">{{
             errors.email
-          }}</span> -->
+          }}</span>
         </div>
 
         <!-- Password -->
@@ -57,36 +105,35 @@
           >
           <input
             type="password"
-
+            v-model="password"
+            v-bind="passwordAttrs"
             placeholder="••••••••"
             class="w-full bg-slate-50/50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:border-emerald-600 transition-colors"
           />
-            <!-- v-model="password"
-            v-bind="passwordAttrs"
+
           <span v-if="errors.password" class="text-red-500 text-xs mt-1 block">{{
             errors.password
-          }}</span> -->
+          }}</span>
         </div>
 
         <!-- Botón de Iniciar sesión -->
         <button
           type="submit"
-
+          :disabled="disabled"
           class="w-full mt-2 inline-flex items-center justify-center px-4 py-2.5 rounded-lg text-sm font-medium bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
         >
-        <!-- :disabled="disabled"
-          <span>{{ isPending ? 'Iniciando sesión...' : 'Iniciar sesión' }}</span> -->
+          <span>{{ isPending ? 'Iniciando sesión...' : 'Iniciar sesión' }}</span>
         </button>
 
         <!-- Enlace de recuperar contraseña movido al final -->
-        <!-- <div class="flex justify-center pt-2">
+        <div class="flex justify-center pt-2">
           <router-link
-            :to="{ name: 'forgot-password' }"
+            to="/"
             class="text-xs font-medium text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline transition-colors"
           >
             ¿Olvidaste tu contraseña?
           </router-link>
-        </div> -->
+        </div>
       </form>
     </div>
   </div>

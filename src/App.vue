@@ -2,6 +2,7 @@
 
 <template>
   <RouterView />
+    <VueQueryDevtools />
 </template>
 
 <style scoped></style>
