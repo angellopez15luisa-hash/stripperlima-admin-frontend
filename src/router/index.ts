@@ -37,7 +37,7 @@ const router = createRouter({
       path: '/admin',
       name: 'dashboard-layout',
       meta: { requiresAuth: true },
-      redirect: {name:'start'},
+      redirect: { name: 'start' },
       component: () => import('@/views/layouts/DashboardLayout.vue'),
       children: [
         {
@@ -68,7 +68,20 @@ const router = createRouter({
         {
           path: 'eventos',
           name: 'events',
-          component: () => import('@/views/admin/EventsView.vue'),
+          // component: () => import('@/views/admin/EventsView.vue'),
+          redirect: { name: 'galery-events' },
+          children: [
+            {
+              path: '',
+              name: 'galery-events',
+              component: () => import('@/views/admin/EventsView.vue'),
+            },
+            {
+              path: '',
+              name: 'galery-videos',
+              component: () => import('@/views/admin/GaleryVideosView.vue'),
+            },
+          ],
         },
         {
           path: 'paquetes',

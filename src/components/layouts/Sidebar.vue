@@ -1,16 +1,19 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
+import { ref } from 'vue'
+
 defineProps<{
   isOpen: boolean
 }>()
 
 defineEmits(['close'])
 
-// const isCatalogOpen = ref(true)
+// Estado para abrir/cerrar el submenú de Eventos
+const isEventsOpen = ref(true)
 
-// const toggleCatalog = () => {
-//   isCatalogOpen.value = !isCatalogOpen.value
-// }
+const toggleEvents = () => {
+  isEventsOpen.value = !isEventsOpen.value
+}
 </script>
 
 <template>
@@ -45,8 +48,8 @@ defineEmits(['close'])
       <!-- Navegación -->
       <div class="p-4 space-y-2 overflow-y-auto h-[calc(100vh-8rem)] text-sm">
         <div class="space-y-1">
-          <!-- Menú normal: Menu -->
-           <router-link
+          <!-- Menú normal: Inicio -->
+          <router-link
             :to="{ name: 'start' }"
             class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
             exact-active-class="!bg-emerald-100 dark:!bg-emerald-900/40 !text-emerald-700 dark:!text-emerald-300 !font-semibold"
@@ -54,7 +57,7 @@ defineEmits(['close'])
             <font-awesome-icon icon="tags" /> Inicio
           </router-link>
 
-          <!-- Menú normal: Banner -->
+          <!-- Menú normal: Aron -->
           <router-link
             :to="{ name: 'aron' }"
             class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
@@ -63,6 +66,7 @@ defineEmits(['close'])
             <font-awesome-icon icon="pen-to-square" /> Aron
           </router-link>
 
+          <!-- Menú normal: Servicios -->
           <router-link
             :to="{ name: 'services' }"
             class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
@@ -71,22 +75,53 @@ defineEmits(['close'])
             <font-awesome-icon icon="square-check" /> Servicios
           </router-link>
 
+          <!-- Menú normal: Modelos -->
           <router-link
             :to="{ name: 'models' }"
             class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
             exact-active-class="!bg-emerald-100 dark:!bg-emerald-900/40 !text-emerald-700 dark:!text-emerald-300 !font-semibold"
           >
-            <font-awesome-icon  icon="xmark" /> Modelos
+            <font-awesome-icon icon="xmark" /> Modelos
           </router-link>
 
-          <router-link
-            :to="{ name: 'events' }"
-            class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
-            exact-active-class="!bg-emerald-100 dark:!bg-emerald-900/40 !text-emerald-700 dark:!text-emerald-300 !font-semibold"
-          >
-            <font-awesome-icon icon="bag-shopping" /> Eventos
-          </router-link>
+          <!-- Menú Desplegable: Eventos con Subítems -->
+          <div class="space-y-1">
+            <button
+              @click="toggleEvents"
+              class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
+            >
+              <div class="flex items-center gap-3">
+                <font-awesome-icon icon="bag-shopping" />
+                <span>Eventos</span>
+              </div>
+              <font-awesome-icon
+                icon="chevron-down"
+                class="text-xs transition-transform duration-200"
+                :class="{ 'rotate-180': isEventsOpen }"
+              />
+            </button>
 
+            <!-- Subítems de Eventos -->
+            <div v-show="isEventsOpen" class="pl-8 space-y-1">
+              <router-link
+                :to="{ name: 'galery-events' }"
+                class="flex items-center gap-3 px-3 py-2 rounded-lg text-xs text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                exact-active-class="!bg-emerald-100 dark:!bg-emerald-900/40 !text-emerald-700 dark:!text-emerald-300 !font-semibold"
+              >
+                <font-awesome-icon icon="images" class="text-[10px]" /> Galería de eventos
+              </router-link>
+
+              <router-link
+                :to="{ name: 'galery-videos' }"
+                class="flex items-center gap-3 px-3 py-2 rounded-lg text-xs text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                exact-active-class="!bg-emerald-100 dark:!bg-emerald-900/40 !text-emerald-700 dark:!text-emerald-300 !font-semibold"
+              >
+                <font-awesome-icon icon="images"  class="text-[10px]" /> Galería de Videos
+              </router-link>
+            </div>
+          </div>
+
+          <!-- Menú normal: Paquetes -->
           <router-link
             :to="{ name: 'packages' }"
             class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
@@ -95,6 +130,7 @@ defineEmits(['close'])
             <font-awesome-icon icon="sun" /> Paquetes
           </router-link>
 
+          <!-- Menú normal: Contacto -->
           <router-link
             :to="{ name: 'contact' }"
             class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
@@ -102,28 +138,10 @@ defineEmits(['close'])
           >
             <font-awesome-icon icon="boxes-stacked" /> Contacto
           </router-link>
-
-          <!-- Menú normal: How to order -->
-          <!-- <router-link
-            :to="{ name: 'how-order' }"
-            class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
-            active-class="!bg-emerald-100 dark:!bg-emerald-900/40 !text-emerald-700 dark:!text-emerald-300 !font-semibold"
-          >
-            <font-awesome-icon icon="square-check" /> How to order
-          </router-link> -->
-
-          <!-- Menú Padre: Catalog -->
-
-          <!-- <router-link
-            :to="{ name: 'review-opinion' }"
-            class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
-            active-class="!bg-emerald-100 dark:!bg-emerald-900/40 !text-emerald-700 dark:!text-emerald-300 !font-semibold"
-          >
-             <font-awesome-icon icon="square-check" /> Review Opinion
-          </router-link> -->
         </div>
       </div>
     </div>
+
     <!-- Usuario inferior -->
     <div
       class="p-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between"

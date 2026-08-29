@@ -144,7 +144,7 @@ const displayedPages = computed(() => {
 
     <!-- CABECERA Y SECCIÓN 1: Mantenimiento de Textos -->
     <div class="space-y-2">
-      <h1 class="text-2xl font-bold text-white tracking-wide">Mantenimiento Sección: Eventos</h1>
+      <h1 class="text-2xl font-bold text-white tracking-wide">Mantenimiento Sección: Galeria de Eventos</h1>
       <p class="text-sm text-slate-400">Personaliza el título principal, descripción y gestiona el catálogo de eventos del sitio web.</p>
     </div>
 
