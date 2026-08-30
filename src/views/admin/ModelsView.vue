@@ -260,11 +260,7 @@ const displayedPages = computed(() => {
 </script>
 
 <template>
-  <div :class="[
-    'p-8 space-y-8 min-h-screen font-sans transition-colors duration-300',
-    isDarkMode ? 'bg-[#0b0f19] text-slate-100' : 'bg-slate-100 text-slate-800'
-  ]">
-
+   <div class="w-full p-6 space-y-6">
     <!-- CABECERA Y SECCIÓN 1: Mantenimiento de Textos -->
     <div class="space-y-2">
       <h1 :class="['text-2xl font-bold tracking-wide', isDarkMode ? 'text-white' : 'text-slate-900']">Mantenimiento Sección: Modelos</h1>
@@ -272,7 +268,7 @@ const displayedPages = computed(() => {
     </div>
 
     <!-- Tarjeta de Encabezado -->
-   <div class="bg-white dark:bg-[#0b0f19] p-6 rounded-2xl border border-slate-200 dark:border-slate-800/80 shadow-sm space-y-6 transition-colors">
+    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6 transition-colors">
       <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-800 pb-4">
         <div class="flex items-center gap-3">
           <span class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold border border-emerald-500/20 text-xs">H</span>
@@ -281,7 +277,7 @@ const displayedPages = computed(() => {
         <button
           @click="isHeaderEditing = !isHeaderEditing"
           type="button"
-          class="px-3.5 py-1.5 text-xs font-semibold tracking-wider bg-slate-100 hover:bg-slate-200 dark:bg-[#121824] dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl border border-slate-200 dark:border-slate-700/60 transition-all flex items-center gap-2 cursor-pointer"
+          class="px-3.5 py-1.5 text-xs font-semibold tracking-wider bg-slate-100 hover:bg-slate-200 dark:bg-[#0b0f19] dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl border border-slate-200 dark:border-slate-700/60 transition-all flex items-center gap-2 cursor-pointer"
         >
           <font-awesome-icon :icon="isHeaderEditing ? 'xmark' : 'pen-to-square'" />
           {{ isHeaderEditing ? 'Cancelar' : 'Habilitar Edición' }}
@@ -295,7 +291,7 @@ const displayedPages = computed(() => {
             type="text"
             v-model="headerForm.title"
             :disabled="!isHeaderEditing"
-            :class="isHeaderEditing ? 'bg-white dark:bg-[#121824] border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-emerald-500' : 'bg-slate-100 dark:bg-[#121824] border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-300 opacity-80 cursor-not-allowed'"
+            :class="isHeaderEditing ? 'bg-white dark:bg-[#0b0f19] border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-emerald-500' : 'bg-slate-100 dark:bg-[#0b0f19] border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-300 opacity-80 cursor-not-allowed'"
             class="w-full border rounded-xl px-3.5 py-2.5 text-xs focus:outline-none transition-colors"
           />
         </div>
@@ -305,7 +301,7 @@ const displayedPages = computed(() => {
             type="text"
             v-model="headerForm.subtitle"
             :disabled="!isHeaderEditing"
-            :class="isHeaderEditing ? 'bg-white dark:bg-[#121824] border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-emerald-500' : 'bg-slate-100 dark:bg-[#121824] border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-300 opacity-80 cursor-not-allowed'"
+            :class="isHeaderEditing ? 'bg-white dark:bg-[#0b0f19] border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-emerald-500' : 'bg-slate-100 dark:bg-[#0b0f19] border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-300 opacity-80 cursor-not-allowed'"
             class="w-full border rounded-xl px-3.5 py-2.5 text-xs focus:outline-none transition-colors"
           />
         </div>
@@ -325,10 +321,7 @@ const displayedPages = computed(() => {
     </div>
 
     <!-- SECCIÓN 2: Catálogo de Modelos -->
-    <div :class="[
-      'rounded-2xl border shadow-xl overflow-hidden transition-colors duration-300',
-      isDarkMode ? 'bg-[#121824] border-slate-800/80' : 'bg-white border-slate-200'
-    ]">
+   <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden transition-colors duration-300">
       <div :class="['p-6 border-b flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-transparent', isDarkMode ? 'border-slate-800' : 'border-slate-100']">
         <div>
           <h2 :class="['text-base font-bold', isDarkMode ? 'text-white' : 'text-slate-900']">Catálogo de Modelos</h2>
@@ -397,7 +390,7 @@ const displayedPages = computed(() => {
             :key="model.id"
             :class="[
               'rounded-2xl border shadow-lg group hover:border-emerald-500/50 transition-all duration-300 flex flex-col overflow-hidden',
-              isDarkMode ? 'bg-[#0b0f19] border-slate-800/80' : 'bg-white border-slate-200'
+              isDarkMode ? 'bg-[#121824] border-slate-800/80' : 'bg-white border-slate-200'
             ]"
           >
             <div class="relative h-72 w-full overflow-hidden bg-slate-900">
@@ -418,7 +411,7 @@ const displayedPages = computed(() => {
 
             <div :class="[
               'p-4 flex items-center justify-between mt-auto border-t',
-              isDarkMode ? 'border-slate-800/60 bg-[#0b0f19]' : 'border-slate-100 bg-white'
+              isDarkMode ? 'border-slate-800/60 bg-[#121824]' : 'border-slate-100 bg-white'
             ]">
               <div>
                 <h3 :class="['font-semibold text-sm tracking-wide', isDarkMode ? 'text-white' : 'text-slate-900']">{{ model.name }}</h3>
@@ -428,7 +421,7 @@ const displayedPages = computed(() => {
                 <button @click="openEditModal(model)" :class="['w-8 h-8 rounded-lg flex items-center justify-center transition-colors cursor-pointer', isDarkMode ? 'bg-slate-800 hover:bg-slate-700 text-slate-300' : 'bg-slate-100 hover:bg-slate-200 text-slate-700']" title="Editar">
                   <font-awesome-icon icon="pen-to-square" class="text-xs" />
                 </button>
-                <button @click="deleteModel(model.id)" class="w-8 h-8 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 flex items-center justify-center transition-colors cursor-pointer" title="Eliminar">
+                <button @click="deleteModel(model.id)" :class="['w-8 h-8 rounded-lg flex items-center justify-center transition-colors cursor-pointer', isDarkMode ? 'bg-slate-800 hover:bg-slate-700 text-slate-300' : 'bg-slate-100 hover:bg-slate-200 text-slate-700']" title="Eliminar">
                   <font-awesome-icon icon="trash" class="text-xs" />
                 </button>
               </div>

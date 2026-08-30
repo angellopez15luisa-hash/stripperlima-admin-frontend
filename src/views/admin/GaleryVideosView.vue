@@ -17,7 +17,7 @@ const rowsPerPage = ref<number>(8)
 const isHeaderEditing = ref<boolean>(false)
 const headerForm = ref({
   title: 'Galería de Videos',
-  subtitle: 'Explora nuestra selección de videos y revive los mejores momentos de nuestros shows.'
+  subtitle: 'Descubre algunos de nuestros videos más memorables y déjate inspirar para tu próxima celebración.'
 })
 
 const saveHeader = () => {
@@ -27,12 +27,12 @@ const saveHeader = () => {
     text: 'El encabezado se ha guardado correctamente.',
     icon: 'success',
     confirmButtonColor: '#059669',
-    background: '#0f172a',
+    background: '#0F172B',
     color: '#f8fafc',
   })
 }
 
-// Registros de muestra adaptados para videos de la galería
+// Registros de muestra adaptados
 const videos = ref<VideoItem[]>([
   { id: 1, title: 'SHOW EN VIVO - BUS COMERCIAL', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Activo' },
   { id: 2, title: 'SHOW PRIVADO NOCTURNO', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Activo' },
@@ -44,28 +44,6 @@ const videos = ref<VideoItem[]>([
   { id: 8, title: 'FIESTA PRIVADA', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Activo' },
   { id: 9, title: 'BUS RUMBA EXPRESS', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Activo' },
   { id: 10, title: 'SHOW DE ANIMACIÓN', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Activo' },
-  { id: 11, title: 'EVENTO EXCLUSIVO B', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Inactivo' },
-  { id: 12, title: 'FIESTA NEON PARTY', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Activo' },
-  { id: 13, title: 'SHOW NOCHE DE GALA', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Activo' },
-  { id: 14, title: 'DESPEDIDA SOLTERA TOP', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Activo' },
-  { id: 15, title: 'SHOW URBANO LIVE', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Activo' },
-  { id: 16, title: 'FIESTA RETRO 80S', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Activo' },
-  { id: 17, title: 'BUS PARANDERO VIP', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Activo' },
-  { id: 18, title: 'SHOW ESTELAR NOCTURNO', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Activo' },
-  { id: 19, title: 'EVENTO OPEN AIR', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Inactivo' },
-  { id: 20, title: 'FIESTA TROPICAL MIX', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Activo' },
-   { id: 10, title: 'SHOW DE ANIMACIÓN', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Activo' },
-  { id: 11, title: 'EVENTO EXCLUSIVO B', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Inactivo' },
-  { id: 12, title: 'FIESTA NEON PARTY', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Activo' },
-  { id: 13, title: 'SHOW NOCHE DE GALA', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Activo' },
-  { id: 14, title: 'DESPEDIDA SOLTERA TOP', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Activo' },
-  { id: 15, title: 'SHOW URBANO LIVE', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Activo' },
-  { id: 16, title: 'FIESTA RETRO 80S', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Activo' },
-  { id: 17, title: 'BUS PARANDERO VIP', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Activo' },
-  { id: 18, title: 'SHOW ESTELAR NOCTURNO', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Activo' },
-  { id: 19, title: 'EVENTO OPEN AIR', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Inactivo' },
-  { id: 20, title: 'FIESTA TROPICAL MIX', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Activo' },
-   { id: 10, title: 'SHOW DE ANIMACIÓN', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Activo' },
   { id: 11, title: 'EVENTO EXCLUSIVO B', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Inactivo' },
   { id: 12, title: 'FIESTA NEON PARTY', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Activo' },
   { id: 13, title: 'SHOW NOCHE DE GALA', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', status: 'Activo' },
@@ -142,25 +120,24 @@ const displayedPages = computed(() => {
 </script>
 
 <template>
-  <div class="p-8 space-y-8 bg-slate-50 dark:bg-[#0b0f19] min-h-screen text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300">
+  <div class="w-full p-6 space-y-6">
 
-    <!-- CABECERA Y SECCIÓN 1: Mantenimiento de Textos -->
-    <div class="space-y-2">
-      <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-wide">Mantenimiento Sección: Galería de Videos</h1>
-      <p class="text-sm text-slate-500 dark:text-slate-400">Personaliza el título principal, descripción y gestiona el catálogo de videos del sitio web.</p>
+    <div class="space-y-1">
+      <h1 class="text-xl font-bold text-slate-900 dark:text-white tracking-wide">Mantenimiento Sección: Galería de Videos</h1>
+      <p class="text-xs text-slate-500 dark:text-slate-400">Personaliza el título principal, descripción y gestiona el catálogo de videos del sitio web.</p>
     </div>
 
-    <!-- Tarjeta de Encabezado -->
-    <div class="bg-white dark:bg-[#0b0f19] p-6 rounded-2xl border border-slate-200 dark:border-slate-800/80 shadow-sm space-y-6 transition-colors">
+    <!-- Sección Encabezado con color #0F172B -->
+    <div class="bg-white dark:bg-[#0F172B] p-6 rounded-2xl border border-slate-200 dark:border-slate-800/80 shadow-sm space-y-6 transition-colors">
       <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-800 pb-4">
         <div class="flex items-center gap-3">
-          <span class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold border border-emerald-500/20 text-xs">H</span>
-          <h2 class="text-sm font-semibold text-slate-800 dark:text-white">Encabezado de la Sección</h2>
+          <span class="w-7 h-7 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold border border-emerald-500/20 text-xs">H</span>
+          <h2 class="text-xs font-bold text-slate-800 dark:text-white uppercase tracking-wider">Encabezado de la Sección</h2>
         </div>
         <button
           @click="isHeaderEditing = !isHeaderEditing"
           type="button"
-          class="px-3.5 py-1.5 text-xs font-semibold tracking-wider bg-slate-100 hover:bg-slate-200 dark:bg-[#121824] dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl border border-slate-200 dark:border-slate-700/60 transition-all flex items-center gap-2 cursor-pointer"
+          class="px-3.5 py-1.5 text-xs font-semibold tracking-wider bg-slate-100 hover:bg-slate-200 dark:bg-[#1e293b] dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl border border-slate-200 dark:border-slate-700/60 transition-all flex items-center gap-2 cursor-pointer"
         >
           <font-awesome-icon :icon="isHeaderEditing ? 'xmark' : 'pen-to-square'" />
           {{ isHeaderEditing ? 'Cancelar' : 'Habilitar Edición' }}
@@ -169,22 +146,22 @@ const displayedPages = computed(() => {
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Título Principal</label>
+          <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Título Principal</label>
           <input
             type="text"
             v-model="headerForm.title"
             :disabled="!isHeaderEditing"
-            :class="isHeaderEditing ? 'bg-white dark:bg-[#121824] border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-emerald-500' : 'bg-slate-100 dark:bg-[#121824] border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-300 opacity-80 cursor-not-allowed'"
+            :class="isHeaderEditing ? 'bg-white dark:bg-[#1e293b] border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-emerald-500' : 'bg-slate-50 dark:bg-[#1e293b]/50 border-slate-200 dark:border-slate-800/60 text-slate-500 dark:text-slate-400 opacity-90 cursor-not-allowed'"
             class="w-full border rounded-xl px-3.5 py-2.5 text-xs focus:outline-none transition-colors"
           />
         </div>
         <div>
-          <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Subtítulo de Cabecera</label>
+          <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Subtítulo de Cabecera</label>
           <input
             type="text"
             v-model="headerForm.subtitle"
             :disabled="!isHeaderEditing"
-            :class="isHeaderEditing ? 'bg-white dark:bg-[#121824] border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-emerald-500' : 'bg-slate-100 dark:bg-[#121824] border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-300 opacity-80 cursor-not-allowed'"
+            :class="isHeaderEditing ? 'bg-white dark:bg-[#1e293b] border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-emerald-500' : 'bg-slate-50 dark:bg-[#1e293b]/50 border-slate-200 dark:border-slate-800/60 text-slate-500 dark:text-slate-400 opacity-90 cursor-not-allowed'"
             class="w-full border rounded-xl px-3.5 py-2.5 text-xs focus:outline-none transition-colors"
           />
         </div>
@@ -203,19 +180,17 @@ const displayedPages = computed(() => {
       </div>
     </div>
 
-    <!-- SECCIÓN 2: Gestión de Videos (Grid de Videos Verticales) -->
-    <div class="bg-white dark:bg-[#0b0f19] rounded-2xl border border-slate-200 dark:border-slate-800/85 shadow-xl overflow-hidden transition-colors duration-300">
+    <!-- Contenedor Principal de la Galería con color #0F172B -->
+    <div class="bg-white dark:bg-[#0F172B] rounded-2xl border border-slate-200 dark:border-slate-800/85 shadow-xl overflow-hidden transition-colors duration-300">
 
-      <!-- Cabecera / Filtros -->
       <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-transparent">
         <div>
-          <h2 class="text-base font-bold text-slate-900 dark:text-white">Catálogo de Videos</h2>
-          <p class="text-xs text-slate-500 dark:text-slate-400">Crea, agrega o administra los videos del bloque multimedia.</p>
+          <h2 class="text-sm font-bold text-slate-900 dark:text-white">Catálogo de Videos</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400">Crea, agrega o administra los videos del sitio web.</p>
         </div>
 
         <div class="flex items-center gap-3 w-full md:w-auto justify-end flex-wrap">
-          <!-- Buscador -->
-          <div class="relative w-full sm:w-60">
+          <div class="relative w-full sm:w-64">
             <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
               <font-awesome-icon icon="magnifying-glass" class="text-xs" />
             </span>
@@ -223,59 +198,55 @@ const displayedPages = computed(() => {
               type="text"
               v-model="searchQuery"
               placeholder="Buscar por título..."
-              class="w-full bg-slate-50 dark:bg-[#121824] border border-slate-200 dark:border-slate-800 rounded-xl pl-10 pr-4 py-2 text-sm text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors shadow-sm"
+              class="w-full bg-slate-50 dark:bg-[#1e293b] border border-slate-200 dark:border-slate-800 rounded-xl pl-10 pr-4 py-2 text-xs text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors shadow-sm"
             />
           </div>
 
-          <!-- Botón Refrescar Cuadrado -->
           <button
             @click="refreshData"
-            class="w-[38px] h-[38px] bg-slate-100 dark:bg-[#121824] border border-slate-200 dark:border-slate-800 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl transition-all flex items-center justify-center shadow-sm cursor-pointer"
+            class="w-[34px] h-[34px] bg-slate-100 dark:bg-[#1e293b] border border-slate-200 dark:border-slate-800 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl transition-all flex items-center justify-center shadow-sm cursor-pointer"
             title="Refrescar data"
           >
             <font-awesome-icon icon="sync" class="text-xs" />
           </button>
 
-          <!-- Botón Nuevo Video Esmeralda -->
-          <button class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm rounded-xl transition-all flex items-center gap-2 whitespace-nowrap shadow-lg shadow-emerald-600/20 dark:shadow-emerald-900/20 cursor-pointer">
+          <!-- Botón Nuevo Video -->
+          <button class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl transition-all flex items-center gap-2 whitespace-nowrap shadow-lg shadow-emerald-600/20 dark:shadow-emerald-950/40 cursor-pointer">
             <font-awesome-icon icon="plus" class="text-xs" /> Nuevo Video
           </button>
         </div>
       </div>
 
-      <!-- Grid de Videos -->
       <div class="p-6">
         <div v-if="paginatedVideos.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           <div
             v-for="video in paginatedVideos"
             :key="video.id"
-            class="bg-slate-50 dark:bg-[#121824] rounded-2xl border border-slate-200 dark:border-slate-800/85 overflow-hidden shadow-lg group hover:border-emerald-500/50 transition-all duration-300 flex flex-col"
+            class="bg-white dark:bg-[#0F172B] rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm group hover:border-emerald-500/50 transition-all duration-300 flex flex-col"
           >
-            <!-- Contenedor Video -->
-            <div class="relative h-72 w-full overflow-hidden bg-slate-900">
+            <div class="relative h-48 w-full overflow-hidden bg-slate-900 rounded-t-xl">
               <video
                 :src="video.videoUrl"
                 controls
                 preload="metadata"
                 class="w-full h-full object-cover object-center"
               ></video>
-              <!-- Badge Estado -->
               <span class="absolute top-3 right-3 px-2.5 py-1 rounded-full text-[10px] font-medium bg-slate-900/70 text-slate-300 border border-slate-700 backdrop-blur-md z-10 pointer-events-none">
                 {{ video.status }}
               </span>
             </div>
 
-            <!-- Información e Acciones Inferiores -->
-            <div class="p-4 flex items-center justify-between mt-auto border-t border-slate-200 dark:border-slate-800/60 bg-slate-50 dark:bg-[#121824]">
+            <div class="p-4 flex items-center justify-between mt-auto bg-white dark:bg-[#0F172B]">
               <div>
-                <h3 class="font-semibold text-slate-900 dark:text-white text-xs tracking-wide">{{ video.title }}</h3>
-                <p class="text-[10px] text-slate-500 dark:text-slate-400">ID: #{{ video.id }}</p>
+                <h3 class="font-semibold text-slate-900 dark:text-white text-xs tracking-wide line-clamp-1">{{ video.title }}</h3>
+                <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">ID: #{{ video.id }}</p>
               </div>
               <div class="flex items-center gap-1.5">
-                <button class="w-7 h-7 rounded-lg bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 flex items-center justify-center transition-colors cursor-pointer" title="Editar">
+                <button class="w-8 h-8 rounded-xl bg-slate-100 dark:bg-[#1e293b] hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 flex items-center justify-center transition-colors cursor-pointer" title="Editar">
                   <font-awesome-icon icon="pen-to-square" class="text-[10px]" />
                 </button>
-                <button @click="deleteVideo(video.id)" class="w-7 h-7 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-600 dark:text-red-400 border border-red-500/20 flex items-center justify-center transition-colors cursor-pointer" title="Eliminar">
+                <!-- Botón eliminar con el mismo estilo estándar del botón editar -->
+                <button @click="deleteVideo(video.id)" class="w-8 h-8 rounded-xl bg-slate-100 dark:bg-[#1e293b] hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 flex items-center justify-center transition-colors cursor-pointer" title="Eliminar">
                   <font-awesome-icon icon="trash" class="text-[10px]" />
                 </button>
               </div>
@@ -283,20 +254,18 @@ const displayedPages = computed(() => {
           </div>
         </div>
 
-        <!-- Estado Vacío -->
         <div v-else class="py-16 text-center text-slate-400 dark:text-slate-500">
           <font-awesome-icon icon="face-meh" class="text-3xl mb-3 text-slate-400 dark:text-slate-600" />
-          <p class="text-sm">No se encontraron videos registrados con los filtros seleccionados.</p>
+          <p class="text-xs">No se encontraron videos registrados con los filtros seleccionados.</p>
         </div>
       </div>
 
-      <!-- Paginación Inferior -->
       <div class="p-4 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-500 dark:text-slate-400">
         <div class="flex items-center gap-2">
           <span>Mostrando {{ startIndex }} - {{ endIndex }} de {{ filteredVideos.length }}</span>
           <div class="flex items-center gap-1.5 ml-4">
             <span>Filas</span>
-            <select v-model="rowsPerPage" @change="currentPage = 1" class="bg-slate-50 dark:bg-[#121824] border border-slate-200 dark:border-slate-800 rounded-lg px-2.5 py-1 text-slate-700 dark:text-slate-300 focus:outline-none cursor-pointer">
+            <select v-model="rowsPerPage" @change="currentPage = 1" class="bg-slate-50 dark:bg-[#1e293b] border border-slate-200 dark:border-slate-800 rounded-lg px-2.5 py-1 text-slate-700 dark:text-slate-300 focus:outline-none cursor-pointer">
               <option :value="4">4</option>
               <option :value="8">8</option>
               <option :value="12">12</option>
@@ -305,16 +274,14 @@ const displayedPages = computed(() => {
         </div>
 
         <div class="flex items-center gap-1">
-          <!-- Botón Anterior -->
           <button
             @click="currentPage > 1 && currentPage--"
             :disabled="currentPage === 1"
-            class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-100 dark:bg-[#121824] border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+            class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-100 dark:bg-[#1e293b] border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
           >
             &lt;
           </button>
 
-          <!-- Números de Página y Puntos Suspensivos -->
           <template v-for="(page, index) in displayedPages" :key="index">
             <span v-if="page === '...'" class="w-8 h-8 flex items-center justify-center text-slate-400 dark:text-slate-500 font-bold">
               ...
@@ -326,18 +293,17 @@ const displayedPages = computed(() => {
                 'w-8 h-8 flex items-center justify-center rounded-lg font-semibold shadow-sm cursor-pointer transition-all',
                 currentPage === page
                   ? 'bg-emerald-600 text-white'
-                  : 'bg-slate-100 dark:bg-[#121824] border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800'
+                  : 'bg-slate-100 dark:bg-[#1e293b] border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800'
               ]"
             >
               {{ page }}
             </button>
           </template>
 
-          <!-- Botón Siguiente -->
           <button
             @click="currentPage < totalPages && currentPage++"
             :disabled="currentPage === totalPages || totalPages === 0"
-            class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-100 dark:bg-[#121824] border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+            class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-100 dark:bg-[#1e293b] border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
           >
             &gt;
           </button>

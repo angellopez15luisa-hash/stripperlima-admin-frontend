@@ -94,7 +94,6 @@ const services = ref<Service[]>([
     image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=300&auto=format&fit=crop',
     status: 'Inactivo'
   }
-
 ])
 
 // Función para guardar los cambios del encabezado
@@ -190,8 +189,8 @@ const displayedPages = computed(() => {
 </script>
 
 <template>
-  <div :class="{ dark: isDark }" class="min-h-screen">
-    <div class="p-6 md:p-8 space-y-8 bg-slate-50 dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 transition-colors duration-300 font-sans">
+  <!-- <div :class="{ dark: isDark }" class="min-h-screen"> -->
+    <div class="w-full p-6 space-y-6">
 
       <!-- Título de la vista -->
       <div class="space-y-1">
@@ -199,62 +198,63 @@ const displayedPages = computed(() => {
         <p class="text-xs text-slate-500 dark:text-slate-400">Personaliza los títulos principales, el contenido descriptivo y las imágenes de los servicios de la landing.</p>
       </div>
 
-      <!-- Tarjeta de Encabezado -->
-      <div class="bg-white dark:bg-[#0b0f19] p-6 rounded-2xl border border-slate-200 dark:border-slate-800/80 shadow-sm space-y-6 transition-colors">
-      <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-800 pb-4">
-        <div class="flex items-center gap-3">
-          <span class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold border border-emerald-500/20 text-xs">H</span>
-          <h2 class="text-sm font-semibold text-slate-800 dark:text-white">Encabezado de la Sección</h2>
+      <!-- Tarjeta de Encabezado (Con tono más suave y elegante en dark: bg-[#111827]) -->
+      <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6 transition-colors">
+        <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-800/60 pb-4">
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold border border-emerald-500/20 text-xs">H</span>
+            <h2 class="text-sm font-semibold text-slate-800 dark:text-white">Encabezado de la Sección</h2>
+          </div>
+          <button
+            @click="isHeaderEditing = !isHeaderEditing"
+            type="button"
+            class="px-3.5 py-1.5 text-xs font-semibold tracking-wider bg-slate-100 hover:bg-slate-200 dark:bg-[#1f2937] dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl border border-slate-200 dark:border-slate-700/60 transition-all flex items-center gap-2 cursor-pointer"
+          >
+            <font-awesome-icon :icon="isHeaderEditing ? 'xmark' : 'pen-to-square'" />
+            {{ isHeaderEditing ? 'Cancelar' : 'Habilitar Edición' }}
+          </button>
         </div>
-        <button
-          @click="isHeaderEditing = !isHeaderEditing"
-          type="button"
-          class="px-3.5 py-1.5 text-xs font-semibold tracking-wider bg-slate-100 hover:bg-slate-200 dark:bg-[#121824] dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl border border-slate-200 dark:border-slate-700/60 transition-all flex items-center gap-2 cursor-pointer"
-        >
-          <font-awesome-icon :icon="isHeaderEditing ? 'xmark' : 'pen-to-square'" />
-          {{ isHeaderEditing ? 'Cancelar' : 'Habilitar Edición' }}
-        </button>
-      </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Título Principal</label>
-          <input
-            type="text"
-            v-model="headerForm.title"
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Título Principal</label>
+            <input
+              type="text"
+              v-model="headerForm.title"
+              :disabled="!isHeaderEditing"
+              :class="isHeaderEditing ? 'bg-white dark:bg-[#1f2937] border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white focus:border-emerald-500' : 'bg-slate-100 dark:bg-[#1f2937]/50 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 opacity-80 cursor-not-allowed'"
+              class="w-full border rounded-xl px-3.5 py-2.5 text-xs focus:outline-none transition-colors"
+            />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Subtítulo de Cabecera</label>
+            <input
+              type="text"
+              v-model="headerForm.subtitle"
+              :disabled="!isHeaderEditing"
+              :class="isHeaderEditing ? 'bg-white dark:bg-[#1f2937] border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white focus:border-emerald-500' : 'bg-slate-100 dark:bg-[#1f2937]/50 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 opacity-80 cursor-not-allowed'"
+              class="w-full border rounded-xl px-3.5 py-2.5 text-xs focus:outline-none transition-colors"
+            />
+          </div>
+        </div>
+
+        <div class="flex justify-end pt-2">
+          <button
+            @click="saveHeader"
+            type="button"
             :disabled="!isHeaderEditing"
-            :class="isHeaderEditing ? 'bg-white dark:bg-[#121824] border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-emerald-500' : 'bg-slate-100 dark:bg-[#121824] border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-300 opacity-80 cursor-not-allowed'"
-            class="w-full border rounded-xl px-3.5 py-2.5 text-xs focus:outline-none transition-colors"
-          />
-        </div>
-        <div>
-          <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Subtítulo de Cabecera</label>
-          <input
-            type="text"
-            v-model="headerForm.subtitle"
-            :disabled="!isHeaderEditing"
-            :class="isHeaderEditing ? 'bg-white dark:bg-[#121824] border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-emerald-500' : 'bg-slate-100 dark:bg-[#121824] border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-300 opacity-80 cursor-not-allowed'"
-            class="w-full border rounded-xl px-3.5 py-2.5 text-xs focus:outline-none transition-colors"
-          />
+            :class="isHeaderEditing ? 'bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer shadow-sm' : 'bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed opacity-60'"
+            class="px-5 py-2 text-xs font-semibold rounded-xl transition-all flex items-center gap-2"
+          >
+            <font-awesome-icon icon="floppy-disk" /> Guardar Cambios
+          </button>
         </div>
       </div>
 
-      <div class="flex justify-end pt-2">
-        <button
-          @click="saveHeader"
-          type="button"
-          :disabled="!isHeaderEditing"
-          :class="isHeaderEditing ? 'bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer shadow-sm' : 'bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed opacity-60'"
-          class="px-5 py-2 text-xs font-semibold rounded-xl transition-all flex items-center gap-2"
-        >
-          <font-awesome-icon icon="floppy-disk" /> Guardar Cambios
-        </button>
-      </div>
-    </div>
-      <!-- Tabla de Servicios -->
-      <div class="bg-white dark:bg-[#0b0f19] rounded-2xl border border-slate-200 dark:border-slate-800/80 shadow-sm overflow-hidden transition-colors">
+      <!-- Tabla de Servicios (Con tono más suave y elegante en dark: bg-[#111827]) -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-colors">
 
-        <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-transparent">
+        <div class="p-6 border-b border-slate-200 dark:border-slate-800/60 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-transparent">
           <div>
             <h2 class="text-sm font-bold text-slate-800 dark:text-white">Gestión de Servicios</h2>
             <p class="text-xs text-slate-500 dark:text-slate-400">Administra las tarjetas y contenidos que se muestran en el sitio web.</p>
@@ -269,14 +269,14 @@ const displayedPages = computed(() => {
                 type="text"
                 v-model="searchQuery"
                 placeholder="Buscar servicio..."
-                class="w-full bg-slate-50 dark:bg-[#121824] border border-slate-200 dark:border-slate-800 rounded-xl pl-10 pr-4 py-2 text-xs text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors shadow-sm"
+                class="w-full bg-slate-50 dark:bg-[#1f2937] border border-slate-200 dark:border-slate-700/60 rounded-xl pl-10 pr-4 py-2 text-xs text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors shadow-sm"
               />
             </div>
 
             <div class="relative w-full sm:w-44">
               <select
                 v-model="selectedStatus"
-                class="w-full bg-slate-50 dark:bg-[#121824] border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-slate-200 focus:outline-none focus:border-emerald-500 transition-colors appearance-none cursor-pointer shadow-sm"
+                class="w-full bg-slate-50 dark:bg-[#1f2937] border border-slate-200 dark:border-slate-700/60 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-slate-200 focus:outline-none focus:border-emerald-500 transition-colors appearance-none cursor-pointer shadow-sm"
               >
                 <option value="Todos">Todos los estados</option>
                 <option value="Activo">Activo</option>
@@ -290,7 +290,7 @@ const displayedPages = computed(() => {
             <button
               @click="refreshData"
               type="button"
-              class="w-[36px] h-[36px] bg-slate-50 dark:bg-[#121824] border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl transition-all flex items-center justify-center shadow-sm cursor-pointer"
+              class="w-[36px] h-[36px] bg-slate-50 dark:bg-[#1f2937] border border-slate-200 dark:border-slate-700/60 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl transition-all flex items-center justify-center shadow-sm cursor-pointer"
               title="Refrescar data"
             >
               <font-awesome-icon icon="sync" class="text-xs" />
@@ -308,7 +308,7 @@ const displayedPages = computed(() => {
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse">
             <thead>
-              <tr class="border-b border-slate-200 dark:border-slate-800 text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider bg-slate-50 dark:bg-[#0b0f19]">
+              <tr class="border-b border-slate-200 dark:border-slate-800/60 text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider bg-slate-50/50 dark:bg-[#111827]">
                 <th class="py-3 px-6">Imagen</th>
                 <th class="py-3 px-6">Título (Title)</th>
                 <th class="py-3 px-6">Descripción (Description)</th>
@@ -317,7 +317,7 @@ const displayedPages = computed(() => {
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-200 dark:divide-slate-800/60 text-xs text-slate-700 dark:text-slate-300">
-              <tr v-for="service in paginatedServices" :key="service.id" class="hover:bg-slate-50 dark:hover:bg-slate-800/20 transition-colors">
+              <tr v-for="service in paginatedServices" :key="service.id" class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
                 <td class="py-3.5 px-6">
                   <img :src="service.image" alt="Preview" class="w-14 h-9 object-cover rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm" />
                 </td>
@@ -351,12 +351,12 @@ const displayedPages = computed(() => {
         </div>
 
         <!-- Paginación -->
-        <div class="p-4 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-500 dark:text-slate-400">
+        <div class="p-4 border-t border-slate-200 dark:border-slate-800/60 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-500 dark:text-slate-400">
           <div class="flex items-center gap-2">
             <span>Showing {{ startIndex }} - {{ endIndex }} of {{ filteredServices.length }}</span>
             <div class="flex items-center gap-1.5 ml-4">
               <span>Rows</span>
-              <select v-model="rowsPerPage" @change="currentPage = 1" class="bg-slate-50 dark:bg-[#121824] border border-slate-200 dark:border-slate-800 rounded-lg px-2.5 py-1 text-slate-700 dark:text-slate-300 focus:outline-none cursor-pointer">
+              <select v-model="rowsPerPage" @change="currentPage = 1" class="bg-slate-50 dark:bg-[#1f2937] border border-slate-200 dark:border-slate-700/60 rounded-lg px-2.5 py-1 text-slate-700 dark:text-slate-300 focus:outline-none cursor-pointer">
                 <option :value="5">5</option>
                 <option :value="10">10</option>
                 <option :value="20">20</option>
@@ -369,7 +369,7 @@ const displayedPages = computed(() => {
               @click="currentPage > 1 && currentPage--"
               :disabled="currentPage === 1"
               type="button"
-              class="w-7 h-7 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-[#121824] border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+              class="w-7 h-7 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-[#1f2937] border border-slate-200 dark:border-slate-700/60 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
             >
               &lt;
             </button>
@@ -384,7 +384,7 @@ const displayedPages = computed(() => {
                 type="button"
                 :class="[
                   'w-7 h-7 flex items-center justify-center rounded-lg font-semibold shadow-sm cursor-pointer transition-all',
-                  currentPage === page ? 'bg-emerald-600 text-white' : 'bg-slate-50 dark:bg-[#121824] border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                  currentPage === page ? 'bg-emerald-600 text-white' : 'bg-slate-50 dark:bg-[#1f2937] border border-slate-200 dark:border-slate-700/60 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
                 ]"
               >
                 {{ page }}
@@ -395,7 +395,7 @@ const displayedPages = computed(() => {
               @click="currentPage < totalPages && currentPage++"
               :disabled="currentPage === totalPages || totalPages === 0"
               type="button"
-              class="w-7 h-7 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-[#121824] border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+              class="w-7 h-7 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-[#1f2937] border border-slate-200 dark:border-slate-700/60 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
             >
               &gt;
             </button>
@@ -405,5 +405,5 @@ const displayedPages = computed(() => {
       </div>
 
     </div>
-  </div>
+  <!-- </div> -->
 </template>

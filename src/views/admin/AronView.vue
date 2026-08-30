@@ -83,7 +83,7 @@ const handleSubmit = () => {
 </script>
 
 <template>
-  <div class="w-full p-8 space-y-8">
+ <div class="w-full p-6 space-y-6">
 
     <div class="border-b border-slate-200 dark:border-slate-800 pb-5">
       <h1 class="text-xl font-bold text-slate-900 dark:text-white">Mantenimiento Sección: Aron</h1>

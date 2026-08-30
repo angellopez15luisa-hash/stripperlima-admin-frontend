@@ -287,9 +287,7 @@ const displayedPages = computed(() => {
 </script>
 
 <template>
-  <div
-    class="p-8 space-y-8 bg-slate-50 dark:bg-[#0b0f19] min-h-screen text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300"
-  >
+  <div class="w-full p-6 space-y-6">
     <!-- CABECERA Y SECCIÓN 1: Mantenimiento de Textos Principales -->
     <div class="space-y-2">
       <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-wide">
@@ -301,7 +299,7 @@ const displayedPages = computed(() => {
     </div>
 
     <!-- Tarjeta de Encabezado -->
-   <div class="bg-white dark:bg-[#0b0f19] p-6 rounded-2xl border border-slate-200 dark:border-slate-800/80 shadow-sm space-y-6 transition-colors">
+   <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6 transition-colors">
       <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-800 pb-4">
         <div class="flex items-center gap-3">
           <span class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold border border-emerald-500/20 text-xs">H</span>
@@ -355,7 +353,7 @@ const displayedPages = computed(() => {
 
     <!-- SECCIÓN 2: Gestión de Tarjetas de Paquetes (Tabla) -->
     <div
-      class="bg-white dark:bg-[#0b0f19] rounded-2xl border border-slate-200 dark:border-slate-800/80 shadow-xl overflow-hidden transition-colors duration-300"
+      class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden transition-colors duration-300"
     >
       <!-- Cabecera de la Tabla / Filtros -->
       <div

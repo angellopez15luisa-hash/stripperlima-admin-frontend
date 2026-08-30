@@ -78,7 +78,7 @@ const handleSubmit = () => {
 </script>
 
 <template>
-  <div class="w-full p-8 space-y-6">
+  <div class="w-full p-6 space-y-6">
     <!-- Encabezado de la Sección -->
     <div class="flex flex-col gap-1">
       <h1 class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
