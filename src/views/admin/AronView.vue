@@ -39,14 +39,14 @@ const form = ref({
     <p>Araon el Indomable Porque el placer también puede tener clase.</p>
   `,
 
-  images: ref<GalleryImage[]>([
+  images: [
     { id: 1, url: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600', file: null },
     { id: 2, url: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=600', file: null },
     { id: 3, url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600', file: null },
     { id: 4, url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600', file: null },
     { id: 5, url: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=600', file: null },
     { id: 6, url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600', file: null },
-  ]).value
+  ] as GalleryImage[]
 })
 
 // Manejar cambio de imagen individual sin errores de TS
@@ -83,7 +83,7 @@ const handleSubmit = () => {
 </script>
 
 <template>
-  <div class="p-6 md:p-8 max-w-7xl mx-auto space-y-8">
+  <div class="w-full p-8 space-y-8">
 
     <div class="border-b border-slate-200 dark:border-slate-800 pb-5">
       <h1 class="text-xl font-bold text-slate-900 dark:text-white">Mantenimiento Sección: Aron</h1>

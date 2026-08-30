@@ -45,7 +45,13 @@ import {
   faFloppyDisk,
 } from '@fortawesome/free-solid-svg-icons'
 // 2. Importa los iconos de marcas ('fab' para redes sociales)
-import { faInstagram, faFacebook, faTiktok } from '@fortawesome/free-brands-svg-icons'
+import {
+  faInstagram,
+  faFacebook,
+  faTiktok,
+  faTwitter,
+  faWhatsapp,
+} from '@fortawesome/free-brands-svg-icons'
 
 import { faBell as faRegularBell } from '@fortawesome/free-regular-svg-icons'
 
@@ -83,6 +89,8 @@ library.add(
   faSync,
   faPlus,
   faTrash,
+  faTwitter,
+  faWhatsapp,
 )
 
 const app = createApp(App)
