@@ -4,7 +4,7 @@ import { Field } from 'vee-validate'
 
 defineProps<{
   banners: any[]
-  bannerError?: string // Recibimos el error como prop
+  bannerError: Record<string, string | undefined> // Recibimos el error como prop
   disabled: boolean    // <-- Nueva prop para controlar el modo edición
 }>()
 
@@ -139,10 +139,10 @@ const handleImageUpload = (event: Event, handleChange: (value: string) => void) 
 
     <!-- Alerta ubicada limpiamente en el extremo inferior de la tarjeta -->
     <div
-      v-if="bannerError"
+      v-if="bannerError.banners"
       class="flex items-center gap-2.5 text-rose-500 text-xs font-semibold bg-rose-500/10 border border-rose-500/20 px-4 py-3 rounded-xl backdrop-blur-md shadow-sm animate-fade-in"
     >
-      <span>⚠️ {{ bannerError }}</span>
+      <span>⚠️ {{ bannerError.banners }}</span>
     </div>
   </div>
 </template>
