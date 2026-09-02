@@ -1,295 +1,201 @@
+<!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
-import { ref } from 'vue'
-import Swal from 'sweetalert2'
+import { computed, onMounted, ref, watch } from 'vue'
+import { configure, useFieldArray, useForm } from 'vee-validate'
+import { generalSettingUpdateSchema } from '@/schemas/general-setting'
+import { GeneralSetting } from '@/values'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
+import { GeneralSettingAction } from '@/business/actions'
+import FormSocialLinks from '@/components/ui/start/FormSocialLinks.vue'
+import FormTextsBanner from '@/components/ui/start/FormTextsBanner.vue'
+import { toTypedSchema } from '@vee-validate/zod'
+import ListImageBanners from '@/components/ui/start/ListImageBanners.vue'
+import { toast } from 'vue3-toastify'
 
-// Estado del formulario actualizado con un array de 2 banners
-const form = ref({
-  title: 'Despedidas de Solteros Inolvidables',
-  subtitle: 'Crea momentos únicos con nuestros servicios exclusivos para despedidas de soltero que nunca olvidarás.',
-  banners: [
-    {
-      id: 1,
-      image: 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=1200',
-      active: true
-    },
-    {
-      id: 2,
-      image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=1200',
-      active: false
-    }
-  ],
-  instagramHref: 'https://instagram.com/aroneventosperu',
-  facebookHref: 'https://facebook.com/aroneventosperu',
-  tiktokHref: 'https://tiktok.com/@el.indomable35',
-  twitterHref: 'https://twitter.com/...',
-  whatsappHref: 'https://wa.me/...',
+configure({
+  validateOnBlur: true,
+  validateOnChange: true,
+  validateOnInput: true,
 })
 
-// Archivos reales seleccionados por índice (listos para Cloudinary)
-const selectedFiles = ref<{ [key: number]: File | null }>({
-  0: null,
-  1: null
+const formSocialLinksRef = ref<any>(null)
+const queryClient = useQueryClient()
+
+// Estado para controlar si la sección está en modo edición o bloqueada
+const isEditing = ref(false)
+
+const { data: generalSetting } = useQuery({
+  queryKey: ['general-settings'],
+  queryFn: () => GeneralSettingAction.getData(),
+  retry: false,
 })
 
-// Función para manejar la selección de archivo por índice
-const handleFileChange = (event: Event, index: number) => {
-  const target = event.target as HTMLInputElement
-  if (target.files && target.files[0]) {
-    const file = target.files[0]
-    selectedFiles.value[index] = file
+const { defineField, resetForm, errors, handleSubmit, meta, validate } = useForm({
+  validationSchema: toTypedSchema(generalSettingUpdateSchema),
+  initialValues: GeneralSetting.updateForm,
+})
 
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      if (e.target?.result) {
-        form.value.banners[index]!.image = e.target.result as string
-      }
-    }
-    reader.readAsDataURL(file)
+const [titleStart] = defineField('titleStart')
+const [descriptionStart] = defineField('descriptionStart')
+const { fields: socialFields } = useFieldArray('socialLinks')
+const { fields: bannerFields, move: moveBanner } = useFieldArray('banners')
+
+const { mutate, isPending } = useMutation({
+  mutationFn: GeneralSettingAction.update,
+  onSuccess: (data) => {
+    resetForm()
+    queryClient.invalidateQueries({ queryKey: ['general-settings'] })
+    toast.success(data.message)
+    isEditing.value = false // Cerramos el modo edición al guardar con éxito
+    setTimeout(() => {
+      formSocialLinksRef.value?.focusFirstInput()
+    }, 600)
+  },
+  onError: (error) => {
+    toast.error(error.message)
+  },
+})
+
+watch(generalSetting, (newData) => {
+  if (newData) {
+    resetForm(
+      {
+        values: { ...newData },
+      },
+      { force: true },
+    )
   }
-}
+}, {
 
-// Función para manejar cuando arrastran y sueltan una imagen por índice
-const handleDrop = (event: DragEvent, index: number) => {
-  if (event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files[0]) {
-    const file = event.dataTransfer.files[0]
-    selectedFiles.value[index] = file
+  deep:true,
+  immediate:true
+})
 
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      if (e.target?.result) {
-        form.value.banners[index]!.image = e.target.result as string
-      }
+watch(
+  () => bannerFields.value,
+  () => {
+    validate()
+  },
+  { deep: true },
+)
+
+onMounted(() => {
+  setTimeout(() => {
+    formSocialLinksRef.value?.focusFirstInput()
+  }, 600)
+})
+// Función para alternar el modo edición con reseteo al cancelar
+const toggleEditing = () => {
+  if (isEditing.value) {
+    // Si estaba editando y decide cancelar, restauramos la data original del servidor
+    if (generalSetting.value) {
+      resetForm(
+        {
+          values: { ...generalSetting.value },
+        },
+        { force: true },
+      )
+      toast.info('Edición cancelada, cambios descartados.')
     }
-    reader.readAsDataURL(file)
   }
+  isEditing.value = !isEditing.value
 }
 
-// Función simulada para guardar cambios
-const handleSubmit = () => {
-  Swal.fire({
-    title: '¡Actualizado!',
-    text: 'Los cambios del banner de inicio se han guardado correctamente.',
-    icon: 'success',
-    confirmButtonColor: '#059669',
-    background: '#0f172a',
-    color: '#f8fafc',
-  })
-}
+// El botón se deshabilita si no es válido, si no está en modo edición, o si está guardando
+const disabled = computed(() => !meta.value.valid || isPending.value || !isEditing.value)
+
+const onSubmit = handleSubmit((values) => {
+  const { id, ...data } = values
+
+  mutate({ id, data })
+})
 </script>
 
 <template>
   <div class="w-full p-6 space-y-6">
-    <!-- Encabezado de la Sección -->
-    <div class="flex flex-col gap-1">
-      <h1 class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
-        Mantenimiento de Sección Inicio
-      </h1>
-      <p class="text-xs text-slate-500 dark:text-slate-400">
-        Gestiona el contenido principal del banner, las imágenes del slider y los enlaces de redes sociales.
-      </p>
+    <!-- Encabezado de la Sección con el Botón Habilitar Edición -->
+    <div class="flex items-center justify-between">
+      <div class="flex flex-col gap-1">
+        <h1 class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
+          Mantenimiento de Sección Inicio
+        </h1>
+        <p class="text-xs text-slate-500 dark:text-slate-400">
+          Gestiona los textos globales, enlaces y el listado interactivo de imágenes para los
+          banners.
+        </p>
+      </div>
+
+      <!-- Botón de Habilitar / Cancelar Edición -->
+      <button
+        type="button"
+        @click="toggleEditing"
+        class="flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl border transition-colors cursor-pointer bg-white text-slate-700 border-slate-300 hover:bg-slate-100 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700 dark:hover:bg-slate-700"
+      >
+        <font-awesome-icon :icon="isEditing ? 'xmark' : 'pen-to-square'" />
+        <span>{{ isEditing ? 'Cancelar Edición' : 'Habilitar Edición' }}</span>
+      </button>
     </div>
 
     <!-- Formulario Principal -->
-    <form @submit.prevent="handleSubmit" class="space-y-6">
+    <form class="space-y-6" @submit.prevent="onSubmit">
+      <!-- REDES SOCIALES -->
+      <FormSocialLinks
+        :socialFields="socialFields"
+        :disabled="!isEditing"
+        ref="formSocialLinksRef"
+      />
 
-      <!-- TARJETA 3: Redes Sociales (Hrefs) -->
-      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-4">
-        <h2 class="text-sm font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
-          <font-awesome-icon icon="share-nodes" class="text-emerald-500" />
-          Enlaces de Redes Sociales (Header Superior)
-        </h2>
+      <!-- TEXTOS DE BANNER -->
+      <FormTextsBanner
+        v-model:title="titleStart"
+        v-model:description="descriptionStart"
+        :errors="errors"
+        :disabled="!isEditing"
+      />
 
-        <div class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-4">
-          <!-- Instagram -->
-          <div>
-            <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1 flex items-center gap-1.5">
-              <font-awesome-icon :icon="['fab', 'instagram']" class="text-pink-500" /> Instagram Href
-            </label>
-            <input
-              v-model="form.instagramHref"
-              type="text"
-              class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition"
-              placeholder="https://instagram.com/..."
-            />
-          </div>
-
-          <!-- Facebook -->
-          <div>
-            <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1 flex items-center gap-1.5">
-              <font-awesome-icon :icon="['fab', 'facebook']" class="text-blue-500" /> Facebook Href
-            </label>
-            <input
-              v-model="form.facebookHref"
-              type="text"
-              class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition"
-              placeholder="https://facebook.com/..."
-            />
-          </div>
-
-          <!-- TikTok -->
-          <div>
-            <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1 flex items-center gap-1.5">
-              <font-awesome-icon :icon="['fab', 'tiktok']" class="text-slate-900 dark:text-white" /> TikTok Href
-            </label>
-            <input
-              v-model="form.tiktokHref"
-              type="text"
-              class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition"
-              placeholder="https://tiktok.com/@..."
-            />
-          </div>
-
-          <!-- Twitter -->
-          <div>
-            <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1 flex items-center gap-1.5">
-              <font-awesome-icon :icon="['fab', 'twitter']" class="text-sky-400" /> Twitter Href
-            </label>
-            <input
-              v-model="form.twitterHref"
-              type="text"
-              class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition"
-              placeholder="https://twitter.com/..."
-            />
-          </div>
-
-          <!-- WhatsApp -->
-          <div>
-            <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1 flex items-center gap-1.5">
-              <font-awesome-icon :icon="['fab', 'whatsapp']" class="text-emerald-500" /> WhatsApp Href
-            </label>
-            <input
-              v-model="form.whatsappHref"
-              type="text"
-              class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition"
-              placeholder="https://wa.me/..."
-            />
-          </div>
+      <!-- SECCIÓN DE BANNERS -->
+      <div class="relative w-full">
+        <ListImageBanners
+          :banners="bannerFields"
+          :disabled="!isEditing"
+          @move="({ from, to }) => moveBanner(from, to)"
+        />
+        <div
+          v-if="errors.banners"
+          class="mt-4 z-10 flex items-center gap-2.5 text-rose-500 text-xs font-semibold bg-rose-500/10 border border-rose-500/20 px-4 py-2.5 rounded-xl backdrop-blur-md shadow-sm animate-fade-in"
+        >
+          <span>⚠️ {{ errors.banners }}</span>
         </div>
       </div>
 
-      <!-- TARJETA 1: Textos Principales del Banner -->
-      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-4">
-        <h2 class="text-sm font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
-          <font-awesome-icon icon="heading" class="text-emerald-500" />
-          Textos del Banner
-        </h2>
-
-        <div class="space-y-3">
-          <div>
-            <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
-              Título Principal
-            </label>
-            <input
-              v-model="form.title"
-              type="text"
-              class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition"
-              placeholder="Ej. Despedidas de Solteros Inolvidables"
-            />
-          </div>
-
-          <div>
-            <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
-              Descripción / Texto Largo
-            </label>
-            <textarea
-              v-model="form.subtitle"
-              rows="3"
-              class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition resize-none"
-              placeholder="Escribe la descripción que aparece sobre el banner..."
-            ></textarea>
-          </div>
-        </div>
-      </div>
-
-      <!-- TARJETA 2: Imágenes del Slider de Banner (Múltiples) -->
-      <div class="space-y-4">
-        <div class="flex items-center justify-between">
-          <h2 class="text-sm font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
-            <font-awesome-icon icon="images" class="text-emerald-500" />
-            Imágenes del Slider del Banner (2 Opciones)
-          </h2>
-        </div>
-
-        <!-- Iteramos sobre los 2 banners -->
-        <div v-for="(banner, index) in form.banners" :key="banner.id" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-4 relative">
-
-          <!-- Cabecera de cada banner (Número y Switch Activo/Inactivo) -->
-          <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
-            <span class="text-xs font-bold text-slate-700 dark:text-slate-300">
-              Banner #{{ index + 1 }}
-            </span>
-
-            <!-- Switch de Activo / Inactivo -->
-            <label class="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" v-model="banner.active" class="sr-only peer">
-              <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-slate-600 peer-checked:bg-emerald-600"></div>
-              <span class="ml-2 text-xs font-medium" :class="banner.active ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'">
-                {{ banner.active ? 'Activo' : 'Inactivo' }}
-              </span>
-            </label>
-          </div>
-
-          <!-- Contenido de subida y vista previa -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
-
-            <!-- Input File / Drag & Drop -->
-            <div class="md:col-span-2 space-y-3">
-              <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
-                Subir Imagen para Banner #{{ index + 1 }}
-              </label>
-
-              <label
-                @dragover.prevent
-                @drop.prevent="(e) => handleDrop(e, index)"
-                class="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl cursor-pointer bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
-              >
-                <div class="flex flex-col items-center justify-center pt-2 pb-2 px-4 text-center pointer-events-none">
-                  <font-awesome-icon icon="cloud-arrow-up" class="text-emerald-500 text-lg mb-1.5" />
-                  <p class="text-xs text-slate-600 dark:text-slate-300 font-medium">
-                    <span class="text-emerald-600 dark:text-emerald-400">Haz clic para subir</span> o arrastra aquí
-                  </p>
-                  <p class="text-[10px] text-slate-400 mt-0.5">PNG, JPG, WEBP (Recomendado 1920x1080px)</p>
-                </div>
-                <input type="file" class="hidden" accept="image/*" @change="(e) => handleFileChange(e, index)" />
-              </label>
-
-              <!-- Nombre del archivo seleccionado -->
-              <p v-if="selectedFiles[index]" class="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium truncate">
-                Archivo seleccionado: {{ selectedFiles[index]?.name }}
-              </p>
-            </div>
-
-            <!-- Vista Previa -->
-            <div class="space-y-1">
-              <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
-                Vista Previa
-              </label>
-              <div class="relative h-36 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 flex items-center justify-center shadow-inner">
-                <img
-                  v-if="banner.image"
-                  :src="banner.image"
-                  alt="Preview Banner"
-                  class="w-full h-full object-cover"
-                />
-                <span v-else class="text-[10px] text-slate-400">Sin vista previa</span>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <!-- Botón de Guardar -->
-      <div class="flex justify-end pt-2">
+      <!-- BOTÓN DE GUARDAR (Siempre visible abajo a la derecha, estilo referencia) -->
+      <div class="flex justify-end w-full pt-0">
         <button
           type="submit"
-          class="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-lg shadow-emerald-600/20 transition-all cursor-pointer flex items-center gap-2"
+          class="px-5 py-2.5 rounded-lg text-sm font-medium bg-emerald-600 hover:bg-emerald-700 text-white transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shadow-sm"
+          :disabled="disabled"
         >
-          <font-awesome-icon icon="floppy-disk" />
-          Guardar Cambios de Inicio
+          <font-awesome-icon v-if="!isPending" :icon="isEditing ? 'floppy-disk' : 'lock'" />
+          <svg v-else class="animate-spin h-3.5 w-3.5 text-white" viewBox="0 0 24 24" fill="none">
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+          <span>{{
+            isPending ? 'Guardando...' : isEditing ? 'Guardar Cambios de Inicio' : 'Guardar Cambios'
+          }}</span>
         </button>
       </div>
-
     </form>
   </div>
 </template>

@@ -93,7 +93,6 @@ const disabled = computed(() => isPending.value || !meta.value.valid)
             errors.email
           }}</span>
         </div>
-
         <button
           type="submit"
           :disabled="disabled"
@@ -101,7 +100,6 @@ const disabled = computed(() => isPending.value || !meta.value.valid)
         >
           <span>{{ isPending ? 'Enviando enlace...' : 'Enviar enlace de recuperación' }}</span>
         </button>
-
         <div class="text-center mt-4">
           <router-link
             :to="{ name: 'sign-in' }"

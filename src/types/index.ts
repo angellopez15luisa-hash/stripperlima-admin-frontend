@@ -8,6 +8,13 @@ export type {
   UserResetPasswordFormData,
   UserGetProfileResponse,
   UserGetProfileResponseData,
-  UserUpdatePasswordForm
-
+  UserUpdatePasswordForm,
 } from './user.type'
+
+export type {
+  GeneralSetting,
+  GeneralSettingDataResponse,
+  GeneralSettingResponse,
+  GeneralSettingForm,
+  GeneralSettingUpdateFormData
+} from './general-setting'

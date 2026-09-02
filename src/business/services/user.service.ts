@@ -5,6 +5,7 @@ import type {
   UserGetProfileResponse,
   UserResetPasswordFormData,
   UserSignInForm,
+  UserSignInResponseData,
   UserUpdatePasswordForm,
 } from '@/types'
 import { isAxiosError } from 'axios'
@@ -17,13 +18,14 @@ import {
 import { messageResponseSchema } from '@/schemas'
 
 export class UserService {
-  static signIn = async (formData: UserSignInForm): Promise<void> => {
+  static signIn = async (formData: UserSignInForm): Promise<UserSignInResponseData> => {
     try {
       const { data } = await UserApi.signIn(formData)
       const response = userSignInResponseDataSchema.safeParse(data)
       if (!response.success)
         throw new Error('La respuesta del servidor no tiene el formato esperado')
       localStorage.setItem(ENV.TOKEN, response.data.token)
+      return response.data
     } catch (error) {
       if (isAxiosError(error) && error.response) {
         throw new Error(error.response.data.message)

@@ -41,8 +41,11 @@ import {
   faPlus,
   faTrash,
   faMagnifyingGlass,
-  faChevronDown,
   faFloppyDisk,
+  faChevronUp,
+  faChevronDown,
+  faTriangleExclamation,
+  faLock
 } from '@fortawesome/free-solid-svg-icons'
 // 2. Importa los iconos de marcas ('fab' para redes sociales)
 import {
@@ -91,6 +94,9 @@ library.add(
   faTrash,
   faTwitter,
   faWhatsapp,
+  faChevronUp,
+  faTriangleExclamation,
+  faLock
 )
 
 const app = createApp(App)

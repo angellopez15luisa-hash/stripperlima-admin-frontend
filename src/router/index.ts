@@ -41,12 +41,7 @@ const router = createRouter({
       component: () => import('@/views/layouts/DashboardLayout.vue'),
       children: [
         {
-          path: 'profile',
-          name: 'profile',
-          component: () => import('@/views/auth/ProfileView.vue'),
-        },
-        {
-          path: '',
+          path: 'inicio',
           name: 'start',
           component: () => import('@/views/admin/StartView.vue'),
         },
@@ -72,12 +67,12 @@ const router = createRouter({
           redirect: { name: 'galery-events' },
           children: [
             {
-              path: '',
+              path: 'galeria-eventos',
               name: 'galery-events',
               component: () => import('@/views/admin/EventsView.vue'),
             },
             {
-              path: '',
+              path: 'galeria-videos',
               name: 'galery-videos',
               component: () => import('@/views/admin/GaleryVideosView.vue'),
             },
@@ -92,6 +87,11 @@ const router = createRouter({
           path: 'contacto',
           name: 'contact',
           component: () => import('@/views/admin/ContactView.vue'),
+        },
+        {
+          path: 'profile',
+          name: 'profile',
+          component: () => import('@/views/auth/ProfileView.vue'),
         },
       ],
     },
