@@ -26,7 +26,7 @@ const handleImageUpload = (event: Event, handleChange: (value: string) => void) 
   <div
     class="lg:col-span-7 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-5"
   >
-    <div class="flex items-center justify-between">
+   <div class="flex items-center justify-between">
       <h2 class="text-sm font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
         <font-awesome-icon icon="images" class="text-emerald-500" />
         Galería Ampliada de 6 Imágenes Fijas

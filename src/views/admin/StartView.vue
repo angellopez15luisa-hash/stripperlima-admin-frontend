@@ -4,7 +4,7 @@
 import { computed, nextTick, ref, watch } from 'vue'
 import { configure, useFieldArray, useForm } from 'vee-validate'
 import { generalSettingUpdateSchema } from '@/schemas/general-setting'
-import { GeneralSetting } from '@/values'
+import { GeneralSettingValue } from '@/values'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
 import { GeneralSettingAction } from '@/business/actions'
 import FormSocialLinks from '@/components/ui/start/FormSocialLinks.vue'
@@ -12,7 +12,6 @@ import FormTextsBanner from '@/components/ui/start/FormTextsBanner.vue'
 import { toTypedSchema } from '@vee-validate/zod'
 import ListImageBanners from '@/components/ui/start/ListImageBanners.vue'
 import { toast } from 'vue3-toastify'
-import Swal from 'sweetalert2'
 
 configure({
   validateOnBlur: true,
@@ -34,7 +33,7 @@ const { data: generalSetting } = useQuery({
 
 const { defineField, resetForm, errors, handleSubmit, meta, validate } = useForm({
   validationSchema: toTypedSchema(generalSettingUpdateSchema),
-  initialValues: GeneralSetting.updateForm,
+  initialValues: GeneralSettingValue.updateForm,
 })
 
 const [titleStart] = defineField('titleStart')

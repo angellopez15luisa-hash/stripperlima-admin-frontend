@@ -2,10 +2,6 @@
 <!-- eslint-disable @typescript-eslint/no-unused-vars -->
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
-import Swal from 'sweetalert2'
-
-// Importar el editor Quill para Vue 3 y sus estilos
-// import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import FormTextHeaderAron from '@/components/ui/aron/FormTextHeaderAron.vue'
 import FormTextEditorAron from '@/components/ui/aron/FormTextEditorAron.vue'
@@ -14,7 +10,7 @@ import { configure, useFieldArray, useForm } from 'vee-validate'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
 import { GeneralSettingAction } from '@/business/actions'
 import { generalSettingUpdateSchema } from '@/schemas/general-setting'
-import { GeneralSetting } from '@/values'
+import { GeneralSettingValue } from '@/values'
 import { toTypedSchema } from '@vee-validate/zod'
 import { toast } from 'vue3-toastify'
 
@@ -37,7 +33,7 @@ const { data: generalSetting } = useQuery({
 
 const { defineField, resetForm, errors, handleSubmit, meta } = useForm({
   validationSchema: toTypedSchema(generalSettingUpdateSchema),
-  initialValues: GeneralSetting.updateForm,
+  initialValues: GeneralSettingValue.updateForm,
 })
 
 const [titleAron] = defineField('titleAron')
