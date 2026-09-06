@@ -41,6 +41,23 @@ export const catalogGalleryEventSchema = z.object({
   active: z.boolean({ message: 'El estado activo debe ser un booleano' }).optional(),
 })
 
+export const catalogGalleryVideoSchema = z.object({
+  id: z.number().optional(),
+  title: z
+    .string({
+      invalid_type_error: '* El nombre debe ser una cadena de texto',
+    })
+    .min(1, { message: '* El nombre es requerido' })
+    .min(3, { message: '* El nombre debe tener mas 3 caracteres' })
+    .optional(),
+  videoUrl: z
+    .string()
+    .min(1, { message: '* La url del video es requerido' })
+    .url({ message: 'Debe ser una URL válida' })
+    .optional(),
+  active: z.boolean({ message: 'El estado activo debe ser un booleano' }).optional(),
+})
+
 export const generalSettingSchema = z.object({
   id: z.number().optional(),
   titleStart: z
@@ -143,17 +160,19 @@ export const generalSettingSchema = z.object({
     .min(1, { message: '* La descripción es requerida' })
     .optional(),
 
-  catalogGalleryServices: z.array(
-    z
-      .object({
-        id: z.number(),
-        title: z.string(),
-        description: z.string(),
-        image: z.string(),
-        active: z.boolean({ message: 'El estado activo debe ser un booleano' }),
-      })
-      .optional(),
-  ).optional(),
+  catalogGalleryServices: z
+    .array(
+      z
+        .object({
+          id: z.number(),
+          title: z.string(),
+          description: z.string(),
+          image: z.string(),
+          active: z.boolean({ message: 'El estado activo debe ser un booleano' }),
+        })
+        .optional(),
+    )
+    .optional(),
 
   titleHeaderModels: z
     .string({ invalid_type_error: '* El título del Modelo debe ser texto' })
@@ -168,7 +187,7 @@ export const generalSettingSchema = z.object({
     .min(1, { message: 'Debe haber al menos una imagen en la galería' })
     .optional(),
 
-   titleHeaderGalleryEvents: z
+  titleHeaderGalleryEvents: z
     .string({ invalid_type_error: '* El título debe ser texto' })
     .min(1, { message: '* El título es requerido' })
     .optional(),
@@ -178,6 +197,19 @@ export const generalSettingSchema = z.object({
     .optional(),
   catalogGalleryEvents: z
     .array(catalogGalleryEventSchema)
+    .min(1, { message: 'Debe haber al menos una imagen en la galería' })
+    .optional(),
+
+  titleHeaderGalleryVideos: z
+    .string({ invalid_type_error: '* El título debe ser texto' })
+    .min(1, { message: '* El título es requerido' })
+    .optional(),
+  descriptionHeaderGalleryVideos: z
+    .string({ invalid_type_error: '* La descripción debe ser texto' })
+    .min(1, { message: '* La descripción es requerida' })
+    .optional(),
+  catalogGalleryVideos: z
+    .array(catalogGalleryVideoSchema)
     .min(1, { message: 'Debe haber al menos una imagen en la galería' })
     .optional(),
 })
@@ -230,7 +262,10 @@ export const generalSettingUpdateSchema = generalSettingSchema.pick({
   catalogGalleryModels: true,
   titleHeaderGalleryEvents: true,
   descriptionHeaderGalleryEvents: true,
-  catalogGalleryEvents:true
+  catalogGalleryEvents: true,
+  titleHeaderGalleryVideos: true,
+  descriptionHeaderGalleryVideos: true,
+  catalogGalleryVideos: true,
 })
 
 export const sectionModelsSchema = generalSettingSchema.pick({
@@ -267,7 +302,10 @@ export const generalSettingResponseSchema = generalSettingSchema.pick({
   catalogGalleryModels: true,
   titleHeaderGalleryEvents: true,
   descriptionHeaderGalleryEvents: true,
-  catalogGalleryEvents:true
+  catalogGalleryEvents: true,
+  titleHeaderGalleryVideos: true,
+  descriptionHeaderGalleryVideos: true,
+  catalogGalleryVideos: true,
 })
 
 export const generalSettingDataResponseSchema = z.object({

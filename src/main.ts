@@ -52,7 +52,10 @@ import {
   faArrowDown,
   faArrowLeft,
   faArrowRight,
-  faCircleExclamation
+  faCircleExclamation,
+  faCirclePlay,
+  faPlay,
+  faLink
 } from '@fortawesome/free-solid-svg-icons'
 // 2. Importa los iconos de marcas ('fab' para redes sociales)
 import {
@@ -110,7 +113,10 @@ library.add(
   faArrowDown,
   faArrowLeft,
   faArrowRight,
-  faCircleExclamation
+  faCircleExclamation,
+  faCirclePlay,
+  faPlay,
+  faLink
 )
 
 const app = createApp(App)

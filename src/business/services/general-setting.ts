@@ -23,7 +23,9 @@ export class GeneralSettingService {
 
   static update = async (formData: GeneralSettingUpdateFormData): Promise<MessageResponse> => {
     try {
+      console.log(formData)
       const { data } = await GeneralSettingApi.update(formData)
+
       const response = messageResponseSchema.safeParse(data)
       if (!response.success)
         throw new Error('La respuesta del servidor no tiene el formato esperado')

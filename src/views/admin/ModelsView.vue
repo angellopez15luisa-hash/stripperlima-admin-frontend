@@ -166,6 +166,7 @@ function handleGlobalDelete(id: CatalogGalleryModel['id']) {
 // Envío del formulario principal
 const onSubmit = () => {
   if (!isEditing.value) return
+  console.log(descriptionHeader.value)
 
   mutate({
     id: generalSetting.value?.id,

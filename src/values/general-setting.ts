@@ -1,6 +1,7 @@
 import type {
   CatalogGalleryEventForm,
   CatalogGalleryModelForm,
+  CatalogGalleryVideoForm,
   GeneralSettingCatalogGalleryServicesForm,
   GeneralSettingForm,
 } from '@/types/general-setting'
@@ -48,4 +49,9 @@ export class GeneralSettingValue {
     category: '',
   }
 
+  static catalogGalleryVideoForm: CatalogGalleryVideoForm = {
+    title: '',
+    videoUrl: '',
+    active: false,
+  }
 }
