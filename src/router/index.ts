@@ -69,7 +69,7 @@ const router = createRouter({
             {
               path: 'galeria-eventos',
               name: 'galery-events',
-              component: () => import('@/views/admin/EventsView.vue'),
+              component: () => import('@/views/admin/GalleryEventsView.vue'),
             },
             {
               path: 'galeria-videos',

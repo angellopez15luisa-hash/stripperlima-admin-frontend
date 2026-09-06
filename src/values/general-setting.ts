@@ -1,4 +1,5 @@
 import type {
+  CatalogGalleryEventForm,
   CatalogGalleryModelForm,
   GeneralSettingCatalogGalleryServicesForm,
   GeneralSettingForm,
@@ -39,4 +40,12 @@ export class GeneralSettingValue {
     name: '',
     category: '',
   }
+
+  static catalogGalleryEventForm: CatalogGalleryEventForm = {
+    image: '',
+    active: false,
+    name: '',
+    category: '',
+  }
+
 }

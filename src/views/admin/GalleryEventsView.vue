@@ -8,15 +8,15 @@ import { toTypedSchema } from '@vee-validate/zod'
 
 import HeaderTitlesSlot from '@/components/slots/HeaderTitlesSlot.vue'
 import FormTextHeader from '@/components/ui/shared/FormTextHeader.vue'
-import FormCatalogGalleryModel from '@/components/ui/models/FormCatalogGalleryModel.vue'
+import FormCatalogGalleryEvents from '@/components/ui/gallery-events/FormCatalogGalleryEvents.vue'
 
 import { GeneralSettingAction } from '@/business/actions'
 import { generalSettingUpdateSchema } from '@/schemas/general-setting'
 import { GeneralSettingValue } from '@/values'
-import type { CatalogGalleryModel } from '@/types/general-setting'
+import type { CatalogGalleryEvent } from '@/types/general-setting'
 
 /* ========================================================================== */
-/* CONFIGURACIÓN GLOBAL DE VEE-VALIDATE                                       */
+/* CONFIGURACIÓN GLOBAL DE VEE-VALIDATE                                      */
 /* ========================================================================== */
 configure({
   validateOnBlur: true,
@@ -31,9 +31,9 @@ const formTextHeaderRef = ref<InstanceType<typeof FormTextHeader> | null>(null)
 const queryClient = useQueryClient()
 const isEditing = ref(false)
 
-// Estados locales para la gestión de la galería y filtros
-const catalogGalleryList = ref<CatalogGalleryModel[]>([])
-const originalCatalogBackup = ref<CatalogGalleryModel[]>([])
+// Estados locales para la gestión de la galería de eventos y filtros
+const catalogGalleryList = ref<CatalogGalleryEvent[]>([])
+const originalCatalogBackup = ref<CatalogGalleryEvent[]>([])
 const searchQuery = ref<string>('')
 const selectedCategory = ref<string>('Todos')
 const currentPage = ref<number>(1)
@@ -55,8 +55,8 @@ const { defineField, resetForm, errors, setValues, meta } = useForm({
   initialValues: GeneralSettingValue.updateForm,
 })
 
-const [titleHeader] = defineField('titleHeaderModels')
-const [descriptionHeader] = defineField('descriptionHeaderModels')
+const [titleHeader] = defineField('titleHeaderGalleryEvents')
+const [descriptionHeader] = defineField('descriptionHeaderGalleryEvents')
 
 // Mutación para actualizar los datos en el servidor
 const { mutate, isPending } = useMutation({
@@ -68,9 +68,9 @@ const { mutate, isPending } = useMutation({
     queryClient.setQueryData(['general-settings'], (oldData: any) => {
       return {
         ...oldData,
-        titleHeaderModels: newValues.titleHeaderModels,
-        descriptionHeaderModels: newValues.descriptionHeaderModels,
-        catalogGalleryModels: newValues.catalogGalleryModels,
+        titleHeaderGalleryEvents: newValues.titleHeaderGalleryEvents,
+        descriptionHeaderGalleryEvents: newValues.descriptionHeaderGalleryEvents,
+        catalogGalleryEvents: newValues.catalogGalleryEvents,
       }
     })
 
@@ -100,9 +100,9 @@ const toggleEdit = async () => {
       resetForm(
         {
           values: {
-            titleHeaderModels: generalSetting.value.titleHeaderModels || '',
-            descriptionHeaderModels: generalSetting.value.descriptionHeaderModels || '',
-            catalogGalleryModels: generalSetting.value.catalogGalleryModels || [],
+            titleHeaderGalleryEvents: generalSetting.value.titleHeaderGalleryEvents || '',
+            descriptionHeaderGalleryEvents: generalSetting.value.descriptionHeaderGalleryEvents || '',
+            catalogGalleryEvents: generalSetting.value.catalogGalleryEvents || [],
           },
         },
         { force: true },
@@ -129,35 +129,35 @@ const toggleEdit = async () => {
 }
 
 // Handlers globales para manejar el estado del catálogo en caché
-const handleGlobalCreate = (newModel: CatalogGalleryModel) => {
+const handleGlobalCreate = (newEvent: CatalogGalleryEvent) => {
   queryClient.setQueryData(['general-settings'], (oldData: any) => {
     if (!oldData) return oldData
     return {
       ...oldData,
-      catalogGalleryModels: [newModel, ...(oldData.catalogGalleryModels || [])],
+      catalogGalleryEvents: [newEvent, ...(oldData.catalogGalleryEvents || [])],
     }
   })
 }
 
-function handleGlobalUpdate(id: CatalogGalleryModel['id'], updatedModel: CatalogGalleryModel) {
+function handleGlobalUpdate(id: CatalogGalleryEvent['id'], updatedEvent: CatalogGalleryEvent) {
   queryClient.setQueryData(['general-settings'], (oldData: any) => {
     if (!oldData) return oldData
     return {
       ...oldData,
-      catalogGalleryModels: oldData.catalogGalleryModels.map((model: CatalogGalleryModel) =>
-        model.id === id ? updatedModel : model,
+      catalogGalleryEvents: oldData.catalogGalleryEvents.map((event: CatalogGalleryEvent) =>
+        event.id === id ? updatedEvent : event,
       ),
     }
   })
 }
 
-function handleGlobalDelete(id: CatalogGalleryModel['id']) {
+function handleGlobalDelete(id: CatalogGalleryEvent['id']) {
   queryClient.setQueryData(['general-settings'], (oldData: any) => {
     if (!oldData) return oldData
     return {
       ...oldData,
-      catalogGalleryModels: oldData.catalogGalleryModels.filter(
-        (model: CatalogGalleryModel) => model.id !== id,
+      catalogGalleryEvents: oldData.catalogGalleryEvents.filter(
+        (event: CatalogGalleryEvent) => event.id !== id,
       ),
     }
   })
@@ -170,9 +170,9 @@ const onSubmit = () => {
   mutate({
     id: generalSetting.value?.id,
     data: {
-      titleHeaderModels: titleHeader.value,
-      descriptionHeaderModels: descriptionHeader.value,
-      catalogGalleryModels: catalogGalleryList.value,
+      titleHeaderGalleryEvents: titleHeader.value,
+      descriptionHeaderGalleryEvents: descriptionHeader.value,
+      catalogGalleryEvents: catalogGalleryList.value,
     },
   })
 }
@@ -187,14 +187,14 @@ watch(
   (newData) => {
     if (newData) {
       setValues({
-        titleHeaderModels: newData.titleHeaderModels,
-        descriptionHeaderModels: newData.descriptionHeaderModels,
+        titleHeaderGalleryEvents: newData.titleHeaderGalleryEvents,
+        descriptionHeaderGalleryEvents: newData.descriptionHeaderGalleryEvents,
       })
 
       catalogGalleryList.value =
-        typeof newData.catalogGalleryModels === 'string'
-          ? JSON.parse(newData.catalogGalleryModels)
-          : newData.catalogGalleryModels || []
+        typeof newData.catalogGalleryEvents === 'string'
+          ? JSON.parse(newData.catalogGalleryEvents)
+          : newData.catalogGalleryEvents || []
     }
   },
   {
@@ -214,11 +214,11 @@ const disabled = computed(() => !meta.value.valid || isPending.value || !isEditi
 
 <template>
   <div class="w-full p-6 space-y-6">
-    <!-- CABECERA Y SECCIÓN 1: Mantenimiento de Textos -->
+    <!-- CABECERA Y SECCIÓN: Mantenimiento de Textos de Eventos -->
     <HeaderTitlesSlot>
-      <template #title>Mantenimiento de Sección Modelos</template>
+      <template #title>Mantenimiento de Sección Eventos</template>
       <template #description>
-        Personaliza el título principal, descripción y gestiona el catálogo de modelos del sitio web.
+        Personaliza el título principal, descripción y gestiona el catálogo de eventos del sitio web.
       </template>
       <template #button>
         <button
@@ -243,15 +243,15 @@ const disabled = computed(() => !meta.value.valid || isPending.value || !isEditi
         ref="formTextHeaderRef"
         v-model:title="titleHeader"
         v-model:description="descriptionHeader"
-        title-field-name="titleHeaderModels"
-        desc-field-name="descriptionHeaderModels"
+        title-field-name="titleHeaderGalleryEvents"
+        desc-field-name="descriptionHeaderGalleryEvents"
         :errors="errors"
         :disabled="!isEditing"
       />
 
-      <!-- Componente del catálogo de la galería -->
-      <FormCatalogGalleryModel
-        :models="catalogGalleryList"
+      <!-- Componente del catálogo de la galería de eventos -->
+      <FormCatalogGalleryEvents
+        :events="catalogGalleryList"
         :isEditing="isEditing"
         @create="handleGlobalCreate"
         @update="handleGlobalUpdate"
@@ -289,7 +289,7 @@ const disabled = computed(() => !meta.value.valid || isPending.value || !isEditi
             isPending
               ? 'Guardando...'
               : isEditing
-                ? 'Guardar Cambios de Servicios'
+                ? 'Guardar Cambios de Eventos'
                 : 'Guardar Cambios'
           }}</span>
         </button>

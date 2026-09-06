@@ -21,6 +21,26 @@ export const catalogGalleryModelSchema = z.object({
   active: z.boolean({ message: 'El estado activo debe ser un booleano' }).optional(),
 })
 
+export const catalogGalleryEventSchema = z.object({
+  id: z.number().optional(),
+  name: z
+    .string({
+      invalid_type_error: '* El nombre debe ser una cadena de texto',
+    })
+    .min(1, { message: '* El nombre es requerido' })
+    .min(3, { message: '* El nombre debe tener mas 3 caracteres' })
+    .optional(),
+  category: z
+    .enum(['despedida_vip'], {
+      required_error: '* La categoría es requerida',
+      invalid_type_error: '* Selecciona una categoría válida',
+    })
+    .or(z.literal(''))
+    .optional(),
+  image: z.string().optional(),
+  active: z.boolean({ message: 'El estado activo debe ser un booleano' }).optional(),
+})
+
 export const generalSettingSchema = z.object({
   id: z.number().optional(),
   titleStart: z
@@ -147,6 +167,19 @@ export const generalSettingSchema = z.object({
     .array(catalogGalleryModelSchema)
     .min(1, { message: 'Debe haber al menos una imagen en la galería' })
     .optional(),
+
+   titleHeaderGalleryEvents: z
+    .string({ invalid_type_error: '* El título debe ser texto' })
+    .min(1, { message: '* El título es requerido' })
+    .optional(),
+  descriptionHeaderGalleryEvents: z
+    .string({ invalid_type_error: '* La descripción debe ser texto' })
+    .min(1, { message: '* La descripción es requerida' })
+    .optional(),
+  catalogGalleryEvents: z
+    .array(catalogGalleryEventSchema)
+    .min(1, { message: 'Debe haber al menos una imagen en la galería' })
+    .optional(),
 })
 
 export const catalogGalleryServiceSchema = z.object({
@@ -195,6 +228,9 @@ export const generalSettingUpdateSchema = generalSettingSchema.pick({
   titleHeaderModels: true,
   descriptionHeaderModels: true,
   catalogGalleryModels: true,
+  titleHeaderGalleryEvents: true,
+  descriptionHeaderGalleryEvents: true,
+  catalogGalleryEvents:true
 })
 
 export const sectionModelsSchema = generalSettingSchema.pick({
@@ -229,6 +265,9 @@ export const generalSettingResponseSchema = generalSettingSchema.pick({
   titleHeaderModels: true,
   descriptionHeaderModels: true,
   catalogGalleryModels: true,
+  titleHeaderGalleryEvents: true,
+  descriptionHeaderGalleryEvents: true,
+  catalogGalleryEvents:true
 })
 
 export const generalSettingDataResponseSchema = z.object({
