@@ -1,5 +1,6 @@
 import z from 'zod'
 import type {
+  catalogGalleryModelSchema,
   // catalogGalleryServiceSchema,
   generalSettingCatalogGalleryServiceSchema,
   generalSettingDataResponseSchema,
@@ -32,8 +33,12 @@ export type CatalogGalleryServiceT = {
   active: boolean
 }
 
+export type CatalogGalleryModel = z.infer<typeof catalogGalleryModelSchema>
+
 export type GeneralSettingUpdateFormData = z.infer<typeof generalSettingUpdateFormDataSchema>
 
 export type GeneralSettingCatalogGalleryServicesForm = z.infer<
   typeof generalSettingCatalogGalleryServiceSchema
 >
+
+export type CatalogGalleryModelForm = Omit<CatalogGalleryModel, 'id'>

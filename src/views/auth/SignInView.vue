@@ -29,9 +29,9 @@ const { mutate, isPending } = useMutation({
   mutationFn: UserAction.signIn,
   onSuccess: async () => {
     resetForm()
-    setTimeout(() => {
-      textEmailInputRef.value?.focus()
-    }, 600)
+    // setTimeout(() => {
+    //   textEmailInputRef.value?.focus()
+    // }, 600)
     await router.replace({ name: 'dashboard-layout' })
   },
   onError: (error) => {

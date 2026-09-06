@@ -1,8 +1,28 @@
 import { z } from 'zod'
 import { messageResponseSchema } from './custom.schema'
 
+export const catalogGalleryModelSchema = z.object({
+  id: z.number().optional(),
+  name: z
+    .string({
+      invalid_type_error: '* El nombre debe ser una cadena de texto',
+    })
+    .min(1, { message: '* El nombre es requerido' })
+    .min(3, { message: '* El nombre debe tener mas 3 caracteres' })
+    .optional(),
+  category: z
+    .enum(['bailarinas', 'strippers'], {
+      required_error: '* La categoría es requerida',
+      invalid_type_error: '* Selecciona una categoría válida',
+    })
+    .or(z.literal(''))
+    .optional(),
+  image: z.string().optional(),
+  active: z.boolean({ message: 'El estado activo debe ser un booleano' }).optional(),
+})
+
 export const generalSettingSchema = z.object({
-  id: z.number(),
+  id: z.number().optional(),
   titleStart: z
     .string({
       invalid_type_error: '* El titulo debe ser una cadena de texto',
@@ -95,26 +115,38 @@ export const generalSettingSchema = z.object({
   // --- NUEVOS CAMPOS DE LA SECCIÓN SERVICIOS ---
   titleHeaderServices: z
     .string({ invalid_type_error: '* El título del Servicio debe ser texto' })
-    .min(1, { message: '* El título del Servicio es requerido' }),
-    // .optional(),
+    .min(1, { message: '* El título del Servicio es requerido' })
+    .optional(),
 
   descriptionHeaderServices: z
     .string({ invalid_type_error: '* La descripción debe ser texto' })
-    .min(1, { message: '* La descripción es requerida' }),
-    // .optional(),
+    .min(1, { message: '* La descripción es requerida' })
+    .optional(),
 
-  catalogGalleryServices: z
-    .array(
-      z.object({
+  catalogGalleryServices: z.array(
+    z
+      .object({
         id: z.number(),
         title: z.string(),
         description: z.string(),
         image: z.string(),
-
         active: z.boolean({ message: 'El estado activo debe ser un booleano' }),
-      }),
-    )
-    // .min(1, { message: 'Debe haber al menos una imagen en la galería' }),
+      })
+      .optional(),
+  ).optional(),
+
+  titleHeaderModels: z
+    .string({ invalid_type_error: '* El título del Modelo debe ser texto' })
+    .min(1, { message: '* El título del Modelo es requerido' })
+    .optional(),
+  descriptionHeaderModels: z
+    .string({ invalid_type_error: '* La descripción debe ser texto' })
+    .min(1, { message: '* La descripción es requerida' })
+    .optional(),
+  catalogGalleryModels: z
+    .array(catalogGalleryModelSchema)
+    .min(1, { message: 'Debe haber al menos una imagen en la galería' })
+    .optional(),
 })
 
 export const catalogGalleryServiceSchema = z.object({
@@ -132,7 +164,7 @@ export const catalogGalleryServiceSchema = z.object({
 })
 
 export const generalSettingCatalogGalleryServiceSchema = z.object({
-   title: z
+  title: z
     .string({ message: '* El titulo del servicio debe ser texto' })
     .min(1, { message: '* El titulo del servicio es requerida' }),
   description: z
@@ -160,8 +192,18 @@ export const generalSettingUpdateSchema = generalSettingSchema.pick({
   titleHeaderServices: true,
   descriptionHeaderServices: true,
   catalogGalleryServices: true,
+  titleHeaderModels: true,
+  descriptionHeaderModels: true,
+  catalogGalleryModels: true,
 })
 
+export const sectionModelsSchema = generalSettingSchema.pick({
+  titleHeaderModels: true,
+  descriptionHeaderModels: true,
+  catalogGalleryModels: true,
+})
+
+export const validateSectionModelsSchema = sectionModelsSchema
 // export const generalSettingUpdateSchema = z.object({
 //    titleStart: z.string(),
 //   descriptionStart:z.string(),
@@ -184,6 +226,9 @@ export const generalSettingResponseSchema = generalSettingSchema.pick({
   titleHeaderServices: true,
   descriptionHeaderServices: true,
   catalogGalleryServices: true,
+  titleHeaderModels: true,
+  descriptionHeaderModels: true,
+  catalogGalleryModels: true,
 })
 
 export const generalSettingDataResponseSchema = z.object({

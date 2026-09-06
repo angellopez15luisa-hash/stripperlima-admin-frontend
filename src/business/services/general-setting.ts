@@ -7,7 +7,9 @@ export class GeneralSettingService {
   static getData = async (): Promise<GeneralSettingResponse> => {
     try {
       const { data } = await GeneralSettingApi.getData()
+      console.log(data)
       const response = generalSettingDataResponseSchema.safeParse(data)
+      console.log(response)
       if (!response.success)
         throw new Error('La respuesta del servidor no tiene el formato esperado')
       return response.data.generalSetting

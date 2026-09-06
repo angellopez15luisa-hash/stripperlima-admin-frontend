@@ -6,7 +6,9 @@ const description = defineModel<string>('description')
 
 defineProps<{
   errors: Record<string, string | undefined>
-  disabled: boolean
+  disabled: boolean,
+  titleFieldName: string      // Ej: 'titleHeaderServices'
+  descFieldName: string
 }>()
 
 const titleInputRef = ref<HTMLInputElement | null>(null)
@@ -42,8 +44,8 @@ defineExpose({
           type="text"
           class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition disabled:opacity-60 disabled:cursor-not-allowed"
         />
-        <span v-if="errors?.titleHeaderServices" class="text-red-500 text-sm">
-          {{ errors.titleHeaderServices }}
+        <span v-if="errors[titleFieldName]" class="text-red-500 text-sm">
+          {{ errors[titleFieldName] }}
         </span>
       </div>
 
@@ -57,8 +59,8 @@ defineExpose({
           type="text"
           class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition disabled:opacity-60 disabled:cursor-not-allowed"
         />
-        <span v-if="errors?.descriptionHeaderServices" class="text-red-500 text-sm">
-          {{ errors.descriptionHeaderServices }}
+        <span v-if="errors[descFieldName]" class="text-red-500 text-sm">
+          {{ errors[descFieldName] }}
         </span>
       </div>
     </div>

@@ -8,7 +8,7 @@ import type { CatalogGalleryServiceT } from '@/types/general-setting'
 
 // Configura las reglas globales de validación para VeeValidate
 configure({
-  validateOnBlur: true,
+  validateOnBlur: false,
   validateOnChange: true,
   validateOnInput: true,
 })
@@ -104,7 +104,6 @@ const handleFileUpload = (event: Event) => {
       if (e.target?.result) {
         const base64Result = e.target.result as string
         setFieldValue('image', base64Result)
-        console.log('Imagen seleccionada en base64:', base64Result)
       }
     }
 

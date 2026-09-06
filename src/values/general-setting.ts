@@ -1,4 +1,5 @@
 import type {
+  CatalogGalleryModelForm,
   GeneralSettingCatalogGalleryServicesForm,
   GeneralSettingForm,
 } from '@/types/general-setting'
@@ -20,6 +21,9 @@ export class GeneralSettingValue {
     titleHeaderServices: '',
     descriptionHeaderServices: '',
     catalogGalleryServices: [],
+    titleHeaderModels: '',
+    descriptionHeaderModels: '',
+    catalogGalleryModels: [],
   }
 
   static updateCatalogGalleryService: GeneralSettingCatalogGalleryServicesForm = {
@@ -27,5 +31,12 @@ export class GeneralSettingValue {
     active: false,
     title: '',
     description: '',
+  }
+
+  static catalogGalleryModelForm: CatalogGalleryModelForm = {
+    image: '',
+    active: false,
+    name: '',
+    category: '',
   }
 }

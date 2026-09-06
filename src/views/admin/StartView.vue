@@ -12,6 +12,7 @@ import FormTextsBanner from '@/components/ui/start/FormTextsBanner.vue'
 import { toTypedSchema } from '@vee-validate/zod'
 import ListImageBanners from '@/components/ui/start/ListImageBanners.vue'
 import { toast } from 'vue3-toastify'
+import HeaderTitlesSlot from '@/components/slots/HeaderTitlesSlot.vue'
 
 configure({
   validateOnBlur: true,
@@ -91,7 +92,7 @@ watch(
   { deep: true },
 )
 // Función para alternar el modo edición con reseteo al cancelar
-const toggleEditing = async () => {
+const toggleEdit = async () => {
   isEditing.value = !isEditing.value
   if (isEditing.value) {
     await nextTick()
@@ -123,36 +124,29 @@ const disabled = computed(() => !meta.value.valid || isPending.value || !isEditi
 <template>
   <div class="w-full p-6 space-y-6">
     <!-- Encabezado de la Sección con el Botón Habilitar Edición -->
-    <div
-      class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-slate-200 dark:border-slate-800 pb-5 gap-4"
-    >
-      <div>
-        <h1 class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
-          Mantenimiento de Sección Inicio
-        </h1>
-        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-          Gestiona los textos globales, enlaces y el listado interactivo de imágenes para los
-          banners.
-        </p>
-      </div>
-
-      <!-- Botón de Habilitar / Cancelar Edición -->
-      <button
-        @click="toggleEditing"
-        :class="[
-          'px-4 py-2 text-xs font-medium rounded-xl transition-all duration-200 flex items-center gap-2 border shadow-sm cursor-pointer',
-          isEditing
-            ? 'bg-amber-500/10 border-amber-500/30 text-amber-400 hover:bg-amber-500/20'
-            : 'bg-slate-800/80 border-slate-700 text-slate-200 hover:bg-slate-800 hover:border-slate-600',
-        ]"
+    <HeaderTitlesSlot>
+      <template #title>Mantenimiento de Sección Inicio</template>
+      <template #description
+        >Gestiona los textos globales, enlaces y el listado interactivo de imágenes para los
+        banners.</template
       >
-        <!-- Cambiamos el icono según el estado -->
-        <font-awesome-icon :icon="isEditing ? 'lock' : 'pen-to-square'" />
-
-        <!-- Cambiamos el texto dinámicamente -->
-        {{ isEditing ? 'Bloquear Edición' : 'Habilitar Edición' }}
-      </button>
-    </div>
+      <template #button>
+        <button
+          @click="toggleEdit"
+          :class="[
+            'px-4 py-2 text-xs font-medium rounded-xl transition-all duration-200 flex items-center gap-2 border shadow-sm cursor-pointer',
+            isEditing
+              ? 'bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20'
+              : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-100 dark:border-slate-700 dark:hover:bg-slate-700',
+          ]"
+        >
+          <!-- Cambiamos el icono según el estado -->
+          <font-awesome-icon :icon="isEditing ? 'lock' : 'pen-to-square'" />
+          <!-- Cambiamos el texto dinámicamente -->
+          {{ isEditing ? 'Bloquear Edición' : 'Habilitar Edición' }}
+        </button>
+      </template>
+    </HeaderTitlesSlot>
     <!-- Formulario Principal -->
     <form class="space-y-6" @submit.prevent="onSubmit">
       <!-- REDES SOCIALES -->

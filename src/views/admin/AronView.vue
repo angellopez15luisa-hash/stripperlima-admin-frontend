@@ -13,6 +13,7 @@ import { generalSettingUpdateSchema } from '@/schemas/general-setting'
 import { GeneralSettingValue } from '@/values'
 import { toTypedSchema } from '@vee-validate/zod'
 import { toast } from 'vue3-toastify'
+import HeaderTitlesSlot from '@/components/slots/HeaderTitlesSlot.vue'
 
 configure({
   validateOnBlur: true,
@@ -115,7 +116,7 @@ const toggleEdit = async () => {
 }
 const onSubmit = handleSubmit((values) => {
   if (!isEditing.value) return
-
+ console.log(values)
   const { id, ...data } = values
   mutate({ id, data })
 })
@@ -123,34 +124,29 @@ const disabled = computed(() => !meta.value.valid || isPending.value || !isEditi
 </script>
 <template>
   <div class="w-full p-6 space-y-6">
-    <div
-      class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-slate-200 dark:border-slate-800 pb-5 gap-4"
-    >
-      <div>
-        <h1 class="text-xl font-bold text-slate-900 dark:text-white">
-          Mantenimiento Sección: Aron
-        </h1>
-        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-          Personaliza los textos principales, el contenido descriptivo y las 6 fotografías amplias
-          de la sección.
-        </p>
-      </div>
-      <!-- Botón Superior Habilitar Edición -->
-      <button
-        @click="toggleEdit"
-        :class="[
-          'px-4 py-2 text-xs font-medium rounded-xl transition-all duration-200 flex items-center gap-2 border shadow-sm cursor-pointer',
-          isEditing
-            ? 'bg-amber-500/10 border-amber-500/30 text-amber-400 hover:bg-amber-500/20'
-            : 'bg-slate-800/80 border-slate-700 text-slate-200 hover:bg-slate-800 hover:border-slate-600',
-        ]"
+    <HeaderTitlesSlot>
+      <template #title>Mantenimiento Sección: Aron</template>
+      <template #description
+        >Personaliza los textos principales, el contenido descriptivo y las 6 fotografías amplias de
+        la sección.</template
       >
-        <!-- Cambiamos el icono según el estado -->
-        <font-awesome-icon :icon="isEditing ? 'lock' : 'pen-to-square'" />
-        <!-- Cambiamos el texto dinámicamente -->
-        {{ isEditing ? 'Bloquear Edición' : 'Habilitar Edición' }}
-      </button>
-    </div>
+      <template #button>
+        <button
+          @click="toggleEdit"
+          :class="[
+            'px-4 py-2 text-xs font-medium rounded-xl transition-all duration-200 flex items-center gap-2 border shadow-sm cursor-pointer',
+            isEditing
+              ? 'bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20'
+              : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-100 dark:border-slate-700 dark:hover:bg-slate-700',
+          ]"
+        >
+          <!-- Cambiamos el icono según el estado -->
+          <font-awesome-icon :icon="isEditing ? 'lock' : 'pen-to-square'" />
+          <!-- Cambiamos el texto dinámicamente -->
+          {{ isEditing ? 'Bloquear Edición' : 'Habilitar Edición' }}
+        </button>
+      </template>
+    </HeaderTitlesSlot>
     <form @submit.prevent="onSubmit" class="space-y-6">
       <FormTextHeaderAron
         v-model:title="titleAron"
