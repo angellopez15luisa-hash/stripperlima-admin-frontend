@@ -1,6 +1,7 @@
 import type {
   CatalogGalleryEventForm,
   CatalogGalleryModelForm,
+  CatalogGalleryPackageForm,
   CatalogGalleryVideoForm,
   GeneralSettingCatalogGalleryServicesForm,
   GeneralSettingForm,
@@ -26,6 +27,9 @@ export class GeneralSettingValue {
     titleHeaderModels: '',
     descriptionHeaderModels: '',
     catalogGalleryModels: [],
+    titleHeaderPackages: '',
+    descriptionHeaderPackages: '',
+    catalogGalleryPackages:[]
   }
 
   static updateCatalogGalleryService: GeneralSettingCatalogGalleryServicesForm = {
@@ -53,5 +57,13 @@ export class GeneralSettingValue {
     title: '',
     videoUrl: '',
     active: false,
+  }
+
+  static catalogGalleryPackageForm: CatalogGalleryPackageForm = {
+    icon: '',
+    active: false,
+    description: '',
+    title: '',
+    features: [],
   }
 }

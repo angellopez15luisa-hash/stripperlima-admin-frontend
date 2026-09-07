@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import './assets/main.css'
+import 'remixicon/fonts/remixicon.css'
 
 import App from './App.vue'
 import router from './router'
@@ -55,7 +56,8 @@ import {
   faCircleExclamation,
   faCirclePlay,
   faPlay,
-  faLink
+  faLink,
+  faBoxOpen
 } from '@fortawesome/free-solid-svg-icons'
 // 2. Importa los iconos de marcas ('fab' para redes sociales)
 import {
@@ -116,7 +118,8 @@ library.add(
   faCircleExclamation,
   faCirclePlay,
   faPlay,
-  faLink
+  faLink,
+  faBoxOpen
 )
 
 const app = createApp(App)

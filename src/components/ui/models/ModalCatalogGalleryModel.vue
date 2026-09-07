@@ -103,7 +103,7 @@ watch(
 )
 
 // Función que detecta si presionas Escape
- 
+
 
 // Watcher para activar o desactivar el listener global solo cuando el modal esté abierto
 

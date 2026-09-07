@@ -27,7 +27,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <RouterView />
+  <RouterView :key="$route.fullPath" />
   <VueQueryDevtools />
 </template>
 

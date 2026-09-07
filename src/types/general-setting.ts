@@ -2,6 +2,7 @@ import z from 'zod'
 import type {
   catalogGalleryEventSchema,
   catalogGalleryModelSchema,
+  catalogGalleryPackageSchema,
   catalogGalleryVideoSchema,
   // catalogGalleryServiceSchema,
   generalSettingCatalogGalleryServiceSchema,
@@ -41,6 +42,8 @@ export type CatalogGalleryEvent = z.infer<typeof catalogGalleryEventSchema>
 
 export type CatalogGalleryVideo = z.infer<typeof catalogGalleryVideoSchema>
 
+export type CatalogGalleryPackage = z.infer<typeof catalogGalleryPackageSchema>
+
 export type GeneralSettingUpdateFormData = z.infer<typeof generalSettingUpdateFormDataSchema>
 
 export type GeneralSettingCatalogGalleryServicesForm = z.infer<
@@ -52,3 +55,5 @@ export type CatalogGalleryModelForm = Omit<CatalogGalleryModel, 'id'>
 export type CatalogGalleryEventForm = Omit<CatalogGalleryEvent, 'id'>
 
 export type CatalogGalleryVideoForm = Omit<CatalogGalleryVideo, 'id'>
+
+export type CatalogGalleryPackageForm = Omit<CatalogGalleryPackage, 'id'>

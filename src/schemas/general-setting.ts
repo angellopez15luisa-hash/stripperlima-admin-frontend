@@ -58,6 +58,29 @@ export const catalogGalleryVideoSchema = z.object({
   active: z.boolean({ message: 'El estado activo debe ser un booleano' }).optional(),
 })
 
+export const catalogGalleryPackageSchema = z.object({
+  id: z.number({ message: 'El ID de la Galeria es requerido' }).optional(),
+  icon: z.string({ message: 'El ícono es requerido' }).min(1, { message: 'Selecciona un ícono válido' }),
+  title: z
+    .string({ message: '* El nombre debe ser texto' })
+    .min(1, { message: '* El nombre de la galería es requerido' }),
+  description: z
+    .string({ message: '* La descripción debe ser texto' })
+    .min(1, { message: '* La descripción es requerida' }),
+  features: z
+    .array(
+      z
+        .string()
+        .min(1, { message: '* La característica no puede estar vacía' })
+        .refine((val) => !val.toLowerCase().startsWith('característica'), {
+          message: 'Debes personalizar esta característica',
+        })
+    )
+    .min(3, { message: '* Debes ingresar exactamente 3 características' })
+    .max(3, { message: '* Solo se permiten 3 características' }),
+  active: z.boolean({ message: 'El estado activo debe ser un booleano' }).default(true),
+})
+
 export const generalSettingSchema = z.object({
   id: z.number().optional(),
   titleStart: z
@@ -212,6 +235,19 @@ export const generalSettingSchema = z.object({
     .array(catalogGalleryVideoSchema)
     .min(1, { message: 'Debe haber al menos una imagen en la galería' })
     .optional(),
+
+  titleHeaderPackages: z
+    .string({ invalid_type_error: 'El título debe ser texto' })
+    .min(1, { message: '* El título es requerido' })
+    .optional(),
+  descriptionHeaderPackages: z
+    .string({ invalid_type_error: 'La descripción debe ser texto' })
+    .min(1, { message: '* La descripción es requerida' })
+    .optional(),
+  catalogGalleryPackages: z
+    .array(catalogGalleryPackageSchema)
+    .min(1, { message: 'Debe haber al menos una imagen en la galería' })
+    .optional(),
 })
 
 export const catalogGalleryServiceSchema = z.object({
@@ -266,6 +302,9 @@ export const generalSettingUpdateSchema = generalSettingSchema.pick({
   titleHeaderGalleryVideos: true,
   descriptionHeaderGalleryVideos: true,
   catalogGalleryVideos: true,
+  titleHeaderPackages: true,
+  descriptionHeaderPackages: true,
+  catalogGalleryPackages:true
 })
 
 export const sectionModelsSchema = generalSettingSchema.pick({
@@ -306,6 +345,9 @@ export const generalSettingResponseSchema = generalSettingSchema.pick({
   titleHeaderGalleryVideos: true,
   descriptionHeaderGalleryVideos: true,
   catalogGalleryVideos: true,
+  titleHeaderPackages: true,
+  descriptionHeaderPackages: true,
+  catalogGalleryPackages:true
 })
 
 export const generalSettingDataResponseSchema = z.object({
