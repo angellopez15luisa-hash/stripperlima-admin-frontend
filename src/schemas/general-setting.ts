@@ -60,7 +60,9 @@ export const catalogGalleryVideoSchema = z.object({
 
 export const catalogGalleryPackageSchema = z.object({
   id: z.number({ message: 'El ID de la Galeria es requerido' }).optional(),
-  icon: z.string({ message: 'El ícono es requerido' }).min(1, { message: 'Selecciona un ícono válido' }),
+  icon: z
+    .string({ message: 'El ícono es requerido' })
+    .min(1, { message: 'Selecciona un ícono válido' }),
   title: z
     .string({ message: '* El nombre debe ser texto' })
     .min(1, { message: '* El nombre de la galería es requerido' }),
@@ -74,11 +76,30 @@ export const catalogGalleryPackageSchema = z.object({
         .min(1, { message: '* La característica no puede estar vacía' })
         .refine((val) => !val.toLowerCase().startsWith('característica'), {
           message: 'Debes personalizar esta característica',
-        })
+        }),
     )
     .min(3, { message: '* Debes ingresar exactamente 3 características' })
     .max(3, { message: '* Solo se permiten 3 características' }),
   active: z.boolean({ message: 'El estado activo debe ser un booleano' }).default(true),
+})
+
+export const informationContactSchema = z.object({
+  address: z
+    .string({ message: '* La direccion debe ser texto' })
+    .min(1, { message: '* La direccion es requerida' })
+    .optional(),
+  phone: z
+    .string({ message: '* El telefono debe ser texto' })
+    .min(1, { message: '* La direccion es requerida' })
+    .optional(),
+  email: z
+    .string({ message: '* El email debe ser texto' })
+    .min(1, { message: '* El email es requerida' })
+    .optional(),
+  businessHours: z
+    .string({ message: '* El horario de atencion debe ser texto' })
+    .min(1, { message: '* El horario de atencion es requerida' })
+    .optional(),
 })
 
 export const generalSettingSchema = z.object({
@@ -248,6 +269,16 @@ export const generalSettingSchema = z.object({
     .array(catalogGalleryPackageSchema)
     .min(1, { message: 'Debe haber al menos una imagen en la galería' })
     .optional(),
+
+  titleHeaderContact: z
+    .string({ invalid_type_error: '* El título debe ser texto' })
+    .min(1, { message: '* El título es requerido' })
+    .optional(),
+  descriptionHeaderContact: z
+    .string({ invalid_type_error: '* La descripción debe ser texto' })
+    .min(1, { message: '* La descripción es requerida' })
+    .optional(),
+  informationContact: informationContactSchema.optional(),
 })
 
 export const catalogGalleryServiceSchema = z.object({
@@ -304,7 +335,10 @@ export const generalSettingUpdateSchema = generalSettingSchema.pick({
   catalogGalleryVideos: true,
   titleHeaderPackages: true,
   descriptionHeaderPackages: true,
-  catalogGalleryPackages:true
+  catalogGalleryPackages: true,
+  titleHeaderContact: true,
+  descriptionHeaderContact: true,
+  informationContact: true,
 })
 
 export const sectionModelsSchema = generalSettingSchema.pick({
@@ -312,14 +346,12 @@ export const sectionModelsSchema = generalSettingSchema.pick({
   descriptionHeaderModels: true,
   catalogGalleryModels: true,
 })
-
 export const validateSectionModelsSchema = sectionModelsSchema
 // export const generalSettingUpdateSchema = z.object({
 //    titleStart: z.string(),
 //   descriptionStart:z.string(),
 //   socialLinks:z.record(z.string(), z.unknown())
 // })
-
 export const generalSettingResponseSchema = generalSettingSchema.pick({
   id: true,
   titleStart: true,
@@ -347,7 +379,10 @@ export const generalSettingResponseSchema = generalSettingSchema.pick({
   catalogGalleryVideos: true,
   titleHeaderPackages: true,
   descriptionHeaderPackages: true,
-  catalogGalleryPackages:true
+  catalogGalleryPackages: true,
+  titleHeaderContact: true,
+  descriptionHeaderContact: true,
+  informationContact: true,
 })
 
 export const generalSettingDataResponseSchema = z.object({

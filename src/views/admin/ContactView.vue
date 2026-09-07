@@ -1,202 +1,200 @@
 <script setup lang="ts">
-import Swal from "sweetalert2"
-import { ref } from 'vue'
-
-// Estado reactivo para el formulario de Mantenimiento de Contacto
-const contactContent = ref({
-  sectionTitle: 'Contacto',
-  sectionDescription: 'Estamos aquí para responder a todas tus preguntas y ayudarte a organizar el evento perfecto.',
-  address: 'Pasaje buena Ventura 155 breña Lima - Perú',
-  phone: '+51 929 720 720',
-  email: 'info@stripperlima101.pe',
-  schedule: 'Lunes a Viernes: 10:00 - 20:00\nSábados: 11:00 - 15:00'
+import { GeneralSettingAction } from '@/business/actions'
+import ContainerButtonMainSlot from '@/components/slots/ContainerButtonMainSlot.vue'
+import HeaderTitlesSlot from '@/components/slots/HeaderTitlesSlot.vue'
+import FormInformationContact from '@/components/ui/contact/FormInformationContact.vue'
+import FormTextHeader from '@/components/ui/shared/FormTextHeader.vue'
+import { generalSettingUpdateSchema } from '@/schemas/general-setting'
+import { GeneralSettingValue } from '@/values'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
+import { toTypedSchema } from '@vee-validate/zod'
+import { configure, useForm } from 'vee-validate'
+import { computed, nextTick, ref, watch } from 'vue'
+import { toast } from 'vue3-toastify'
+configure({
+  validateOnBlur: true,
+  validateOnChange: true,
+  validateOnInput: true,
 })
 
-// Estado para la tarjeta 1: Encabezado (Corregido a la sección Contacto)
-const isHeaderEditing = ref<boolean>(false)
-const headerForm = ref({
-  title: 'Contáctanos y Haz Realidad tu Evento',
-  subtitle: 'Ponte en comunicación con nosotros para reservas, cotizaciones y resolver todas tus dudas.'
+const isEditing = ref(false)
+const formTextHeaderRef = ref<InstanceType<typeof FormTextHeader> | null>(null)
+const queryClient = useQueryClient()
+
+const { data: generalSetting } = useQuery({
+  queryKey: ['general-settings'],
+  queryFn: () => GeneralSettingAction.getData(),
+  retry: false,
 })
 
-const saveHeader = () => {
-  isHeaderEditing.value = false
-  Swal.fire({
-    title: '¡Actualizado!',
-    text: 'El encabezado se ha guardado correctamente.',
-    icon: 'success',
-    confirmButtonColor: '#059669',
-    background: '#0f172a',
-    color: '#f8fafc',
-  })
+const { defineField, resetForm, errors, handleSubmit, meta } = useForm({
+  validationSchema: toTypedSchema(generalSettingUpdateSchema),
+  initialValues: GeneralSettingValue.updateForm,
+})
+
+const [titleHeader] = defineField('titleHeaderContact')
+const [descriptionHeader] = defineField('descriptionHeaderContact')
+// const [address] = defineField('informationContact.address')
+// const [phone] = defineField('informationContact.phone')
+// const [email] = defineField('informationContact.email')
+// const [businessHours] = defineField('informationContact.businessHours')
+
+const { mutate, isPending } = useMutation({
+  mutationFn: GeneralSettingAction.update,
+  onSuccess: (data, variables) => {
+    const newValues = variables.data
+
+    // Actualiza la caché local de manera optimista
+    queryClient.setQueryData(['general-settings'], (oldData: any) => {
+      return {
+        ...oldData,
+        titleHeaderContact: newValues.titleHeaderContact,
+        descriptionHeaderContact: newValues.descriptionHeaderContact,
+        informationContact: newValues.informationContact,
+      }
+    })
+
+    resetForm({ values: newValues })
+    queryClient.invalidateQueries({ queryKey: ['general-settings'] })
+    toast.success(data.message)
+    isEditing.value = false
+  },
+  onError: (error: any) => {
+    toast.error(error.message)
+  },
+})
+
+watch(
+  generalSetting,
+  (newData) => {
+    if (newData) {
+      resetForm({
+        // values: {
+        //   titleHeaderContact: newData.titleHeaderContact || '',
+        //   descriptionHeaderContact: newData.descriptionHeaderContact || '',
+        //   informationContact: newData.informationContact || {},
+        // },
+        values: { ...newData },
+      })
+    }
+  },
+  {
+    deep: true,
+    immediate: true,
+  },
+)
+
+const toggleEdit = async () => {
+  isEditing.value = !isEditing.value
+
+  if (isEditing.value) {
+    if (generalSetting.value) {
+      resetForm(
+        {
+          values: {
+            titleHeaderContact: generalSetting.value.titleHeaderContact || '',
+            descriptionHeaderContact: generalSetting.value.descriptionHeaderContact || '',
+            informationContact: generalSetting.value.informationContact || {},
+          },
+          // values: { ...generalSetting.value },
+        },
+        { force: true },
+      )
+    }
+
+    await nextTick()
+    formTextHeaderRef.value?.focusTitle()
+  } else {
+    if (generalSetting.value) {
+      resetForm(
+        {
+          values: { ...generalSetting.value },
+        },
+        { force: true },
+      )
+    }
+    toast.info('Edicion cancelada, cambios descartados.')
+  }
 }
 
-// Estado para la tarjeta 2: Información de Contacto
-const isEditingInfo = ref<boolean>(false)
+const onSubmit = handleSubmit((values) => {
+  if (!isEditing.value) return
+  console.log(values)
+  mutate({ id: generalSetting.value!.id, data: values })
+})
 
-const saveInfoChanges = () => {
-  isEditingInfo.value = false
-  Swal.fire({
-    title: '¡Actualizado!',
-    text: 'La información de contacto se ha guardado correctamente.',
-    icon: 'success',
-    confirmButtonColor: '#059669',
-    background: '#0f172a',
-    color: '#f8fafc',
-  })
-}
+const disabled = computed(() => !meta.value.valid || isPending.value || !isEditing.value)
 </script>
 
 <template>
   <div class="w-full p-6 space-y-6">
-
-    <!-- CABECERA: Título de la Vista -->
-    <div class="space-y-2">
-      <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-wide">Mantenimiento Sección: Contacto</h1>
-      <p class="text-sm text-slate-500 dark:text-slate-400">Administra los textos principales y la información de contacto visible en la landing page.</p>
-    </div>
-
-    <!-- TARJETA 1: Encabezado de la Sección -->
-    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6 transition-colors">
-      <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-800 pb-4">
-        <div class="flex items-center gap-3">
-          <span class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold border border-emerald-500/20 text-xs">H</span>
-          <h2 class="text-sm font-semibold text-slate-800 dark:text-white">Encabezado de la Sección</h2>
-        </div>
+    <HeaderTitlesSlot>
+      <template #title>Mantenimiento de Sección Contacto</template>
+      <template #description>
+        Administra los textos principales y la información de contacto visible en la landing page.
+      </template>
+      <template #button>
         <button
-          @click="isHeaderEditing = !isHeaderEditing"
-          type="button"
-          class="px-3.5 py-1.5 text-xs font-semibold tracking-wider bg-slate-100 hover:bg-slate-200 dark:bg-[#121824] dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl border border-slate-200 dark:border-slate-700/60 transition-all flex items-center gap-2 cursor-pointer"
+          @click="toggleEdit"
+          :class="[
+            'px-4 py-2 text-xs font-medium rounded-xl transition-all duration-200 flex items-center gap-2 border shadow-sm cursor-pointer',
+            isEditing
+              ? 'bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20'
+              : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-100 dark:border-slate-700 dark:hover:bg-slate-700',
+          ]"
         >
-          <font-awesome-icon :icon="isHeaderEditing ? 'xmark' : 'pen-to-square'" />
-          {{ isHeaderEditing ? 'Cancelar' : 'Habilitar Edición' }}
+          <font-awesome-icon :icon="isEditing ? 'lock' : 'pen-to-square'" />
+          {{ isEditing ? 'Bloquear Edición' : 'Habilitar Edición' }}
         </button>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Título Principal</label>
-          <input
-            type="text"
-            v-model="headerForm.title"
-            :disabled="!isHeaderEditing"
-            :class="isHeaderEditing ? 'bg-white dark:bg-[#121824] border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-emerald-500' : 'bg-slate-100 dark:bg-[#121824] border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-300 opacity-80 cursor-not-allowed'"
-            class="w-full border rounded-xl px-3.5 py-2.5 text-xs focus:outline-none transition-colors"
-          />
-        </div>
-        <div>
-          <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">Subtítulo de Cabecera</label>
-          <input
-            type="text"
-            v-model="headerForm.subtitle"
-            :disabled="!isHeaderEditing"
-            :class="isHeaderEditing ? 'bg-white dark:bg-[#121824] border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-emerald-500' : 'bg-slate-100 dark:bg-[#121824] border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-300 opacity-80 cursor-not-allowed'"
-            class="w-full border rounded-xl px-3.5 py-2.5 text-xs focus:outline-none transition-colors"
-          />
-        </div>
-      </div>
-
-      <div class="flex justify-end pt-2">
+      </template>
+    </HeaderTitlesSlot>
+    <form class="space-y-6" @submit.prevent="onSubmit">
+      <FormTextHeader
+        ref="formTextHeaderRef"
+        v-model:title="titleHeader"
+        v-model:description="descriptionHeader"
+        title-field-name="titleHeaderContact"
+        desc-field-name="descriptionHeaderContact"
+        :errors="errors"
+        :disabled="!isEditing"
+      />
+      <FormInformationContact :isEditing />
+      <ContainerButtonMainSlot>
         <button
-          @click="saveHeader"
-          type="button"
-          :disabled="!isHeaderEditing"
-          :class="isHeaderEditing ? 'bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer shadow-sm' : 'bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed opacity-60'"
-          class="px-5 py-2 text-xs font-semibold rounded-xl transition-all flex items-center gap-2"
+          type="submit"
+          class="w-full md:w-auto px-5 py-2.5 rounded-lg text-sm font-medium bg-emerald-600 hover:bg-emerald-700 text-white transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shadow-sm flex items-center justify-center gap-2"
+          :disabled="disabled"
         >
-          <font-awesome-icon icon="floppy-disk" /> Guardar Cambios
+          <!-- Icono dinámico (Disquete o Candado) -->
+          <font-awesome-icon v-if="!isPending" :icon="isEditing ? 'floppy-disk' : 'lock'" />
+
+          <!-- Spinner de carga activo durante la mutación -->
+          <svg v-else class="animate-spin h-3.5 w-3.5 text-white" viewBox="0 0 24 24" fill="none">
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+
+          <!-- Texto dinámico del botón -->
+          <span>{{
+            isPending
+              ? 'Guardando...'
+              : isEditing
+                ? 'Guardar Cambios de Contacto'
+                : 'Guardar Cambios'
+          }}</span>
         </button>
-      </div>
-    </div>
-
-    <!-- TARJETA 2: Información de Contacto -->
-    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
-      <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-800 pb-4">
-        <div class="flex items-center gap-3">
-          <span class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold border border-emerald-500/25 text-xs">I</span>
-          <h2 class="text-sm font-semibold text-slate-800 dark:text-white">Información de Contacto</h2>
-        </div>
-        <button
-          @click="isEditingInfo = !isEditingInfo"
-          type="button"
-          class="px-3.5 py-1.5 text-xs font-semibold tracking-wider bg-slate-100 hover:bg-slate-200 dark:bg-[#121824] dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl border border-slate-200 dark:border-slate-700/60 transition-all flex items-center gap-2 cursor-pointer"
-        >
-          <font-awesome-icon :icon="isEditingInfo ? 'xmark' : 'pen-to-square'" />
-          {{ isEditingInfo ? 'Cancelar' : 'Habilitar Edición' }}
-        </button>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Dirección -->
-        <div>
-          <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2">
-            <font-awesome-icon icon="location-dot" class="text-emerald-500 text-xs" /> Dirección
-          </label>
-          <textarea
-            v-model="contactContent.address"
-            rows="2"
-            :disabled="!isEditingInfo"
-            :class="isEditingInfo ? 'bg-white dark:bg-[#121824] border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-emerald-500' : 'bg-slate-100 dark:bg-[#121824] border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-300 opacity-80 cursor-not-allowed'"
-            class="w-full border rounded-xl px-3.5 py-2.5 text-xs focus:outline-none transition-colors resize-none"
-          ></textarea>
-        </div>
-
-        <!-- Teléfono -->
-        <div>
-          <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2">
-            <font-awesome-icon icon="phone" class="text-emerald-500 text-xs" /> Teléfono
-          </label>
-          <input
-            type="text"
-            v-model="contactContent.phone"
-            :disabled="!isEditingInfo"
-            :class="isEditingInfo ? 'bg-white dark:bg-[#121824] border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-emerald-500' : 'bg-slate-100 dark:bg-[#121824] border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-300 opacity-80 cursor-not-allowed'"
-            class="w-full border rounded-xl px-3.5 py-2.5 text-xs focus:outline-none transition-colors"
-          />
-        </div>
-
-        <!-- Email -->
-        <div>
-          <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2">
-            <font-awesome-icon icon="envelope" class="text-emerald-500 text-xs" /> Email
-          </label>
-          <input
-            type="email"
-            v-model="contactContent.email"
-            :disabled="!isEditingInfo"
-            :class="isEditingInfo ? 'bg-white dark:bg-[#121824] border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-emerald-500' : 'bg-slate-100 dark:bg-[#121824] border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-300 opacity-80 cursor-not-allowed'"
-            class="w-full border rounded-xl px-3.5 py-2.5 text-xs focus:outline-none transition-colors"
-          />
-        </div>
-
-        <!-- Horario de Atención -->
-        <div>
-          <label class="block text-xs font-medium text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2">
-            <font-awesome-icon icon="clock" class="text-emerald-500 text-xs" /> Horario de Atención (Soporta saltos de línea)
-          </label>
-          <textarea
-            v-model="contactContent.schedule"
-            rows="3"
-            :disabled="!isEditingInfo"
-            placeholder="Ej. Lunes a Viernes: 10:00 - 20:00&#10;Sábados: 11:00 - 15:00"
-            :class="isEditingInfo ? 'bg-white dark:bg-[#121824] border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:border-emerald-500 font-mono' : 'bg-slate-100 dark:bg-[#121824] border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-300 opacity-80 cursor-not-allowed font-mono'"
-            class="w-full border rounded-xl px-3.5 py-2.5 text-xs focus:outline-none transition-colors resize-none"
-          ></textarea>
-        </div>
-      </div>
-
-      <div class="flex justify-end pt-2">
-        <button
-          @click="saveInfoChanges"
-          type="button"
-          :disabled="!isEditingInfo"
-          :class="isEditingInfo ? 'bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer shadow-sm' : 'bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed opacity-60'"
-          class="px-5 py-2 text-xs font-semibold rounded-xl transition-all flex items-center gap-2"
-        >
-          <font-awesome-icon icon="floppy-disk" /> Guardar Cambios
-        </button>
-      </div>
-    </div>
-
+      </ContainerButtonMainSlot>
+    </form>
   </div>
 </template>

@@ -11,6 +11,7 @@ import type {
   generalSettingSchema,
   generalSettingUpdateFormDataSchema,
   generalSettingUpdateSchema,
+  informationContactSchema,
 } from '@/schemas/general-setting'
 
 export type GeneralSetting = z.infer<typeof generalSettingSchema>
@@ -44,6 +45,8 @@ export type CatalogGalleryVideo = z.infer<typeof catalogGalleryVideoSchema>
 
 export type CatalogGalleryPackage = z.infer<typeof catalogGalleryPackageSchema>
 
+export type InformationContact = z.infer<typeof informationContactSchema>
+
 export type GeneralSettingUpdateFormData = z.infer<typeof generalSettingUpdateFormDataSchema>
 
 export type GeneralSettingCatalogGalleryServicesForm = z.infer<
@@ -57,3 +60,5 @@ export type CatalogGalleryEventForm = Omit<CatalogGalleryEvent, 'id'>
 export type CatalogGalleryVideoForm = Omit<CatalogGalleryVideo, 'id'>
 
 export type CatalogGalleryPackageForm = Omit<CatalogGalleryPackage, 'id'>
+
+export type InformationContactForm = InformationContact

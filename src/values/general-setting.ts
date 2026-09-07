@@ -5,6 +5,7 @@ import type {
   CatalogGalleryVideoForm,
   GeneralSettingCatalogGalleryServicesForm,
   GeneralSettingForm,
+  InformationContactForm,
 } from '@/types/general-setting'
 
 export class GeneralSettingValue {
@@ -29,7 +30,8 @@ export class GeneralSettingValue {
     catalogGalleryModels: [],
     titleHeaderPackages: '',
     descriptionHeaderPackages: '',
-    catalogGalleryPackages:[]
+    catalogGalleryPackages: [],
+    
   }
 
   static updateCatalogGalleryService: GeneralSettingCatalogGalleryServicesForm = {
@@ -65,5 +67,12 @@ export class GeneralSettingValue {
     description: '',
     title: '',
     features: [],
+  }
+
+  static informationContactForm: InformationContactForm = {
+    address: '',
+    phone: '',
+    email: '',
+    businessHours: '',
   }
 }
