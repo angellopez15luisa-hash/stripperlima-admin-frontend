@@ -23,6 +23,7 @@ const isCurrentDarkMode = () => {
   return document.documentElement.classList.contains('dark')
 }
 
+const LIMIT = import.meta.env.VITE_LIMIT_VIDEOS
 // Variable reactiva para almacenar el texto que escribe el usuario en el buscador
 const searchQuery = ref<string>('')
 // Variable reactiva para almacenar el estado seleccionado en el filtro desplegable (Todos, Activo, Inactivo)
@@ -189,6 +190,8 @@ const displayedPages = computed(() => {
 watch([searchQuery, selectedStatus], () => {
   currentPage.value = 1
 })
+
+const quantityVideos = computed(() => props.videos.length)
 </script>
 
 <template>
@@ -209,6 +212,13 @@ watch([searchQuery, selectedStatus], () => {
 
       <!-- Controles interactivos de la barra superior -->
       <div class="flex items-center gap-3 w-full md:w-auto justify-end flex-wrap">
+        <div
+          v-if="quantityVideos >= LIMIT"
+          class="px-3 py-2 bg-amber-500/10 border border-amber-500/20 rounded-xl text-amber-600 dark:text-amber-400 text-xs font-medium flex items-center gap-1.5 whitespace-nowrap shadow-sm"
+        >
+          <font-awesome-icon icon="triangle-exclamation" class="text-xs" />
+          <span>El límite es {{ LIMIT }}</span>
+        </div>
         <!-- Buscador -->
         <div class="relative w-full sm:w-56">
           <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
@@ -243,6 +253,7 @@ watch([searchQuery, selectedStatus], () => {
 
         <!-- Botón para abrir el modal de creación de un nuevo video -->
         <button
+          v-if="quantityVideos < LIMIT"
           @click="openCreateModal"
           type="button"
           :disabled="disabled"
@@ -266,47 +277,49 @@ watch([searchQuery, selectedStatus], () => {
         class="bg-slate-50 dark:bg-[#111827] border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden flex flex-col justify-between group hover:border-emerald-500/50 transition duration-300 shadow-sm"
       >
         <!-- Sección superior de la tarjeta: Reproductor nativo de video del hosting -->
-      <!-- Sección superior de la tarjeta: Reproductor nativo de video del hosting -->
-<div class="relative h-44 w-full overflow-hidden bg-slate-900 flex items-center justify-center">
-  <video
-    v-if="video.videoUrl"
-    :src="video.videoUrl"
-    class="w-full h-full object-cover"
-    preload="metadata"
-    controls
-  ></video>
-  <div v-else class="text-slate-500 text-xs flex items-center justify-center h-full">
-    Sin URL de video
-  </div>
+        <!-- Sección superior de la tarjeta: Reproductor nativo de video del hosting -->
+        <div
+          class="relative h-44 w-full overflow-hidden bg-slate-900 flex items-center justify-center"
+        >
+          <video
+            v-if="video.videoUrl"
+            :src="video.videoUrl"
+            class="w-full h-full object-cover"
+            preload="metadata"
+            controls
+          ></video>
+          <div v-else class="text-slate-500 text-xs flex items-center justify-center h-full">
+            Sin URL de video
+          </div>
 
-  <!-- 👇 PÉGLALO AQUÍ: Muestra la URL guardada de forma flotante en la esquina inferior -->
-  <span
-    v-if="video.videoUrl"
-    class="absolute bottom-2 left-2 text-[11px] text-white/80 bg-black/60 px-2 py-0.5 rounded truncate max-w-[90%] backdrop-blur-sm pointer-events-none z-10"
-  >
-    {{ video.videoUrl }}
-  </span>
+          <!-- 👇 PÉGLALO AQUÍ: Muestra la URL guardada de forma flotante en la esquina inferior -->
+          <span
+            v-if="video.videoUrl"
+            class="absolute bottom-2 left-2 text-[11px] text-white/80 bg-black/60 px-2 py-0.5 rounded truncate max-w-[90%] backdrop-blur-sm pointer-events-none z-10"
+          >
+            {{ video.videoUrl }}
+          </span>
 
-  <!-- Indicador visual de estado (Activo/Inactivo) -->
-  <div class="absolute top-3 right-3 z-10 pointer-events-none">
-    <span
-      :class="[
-        'px-3 py-1 rounded-full text-[10px] font-semibold flex items-center gap-1.5 shadow-md border backdrop-blur-md',
-        video.active
-          ? 'bg-slate-900/80 text-emerald-400 border-emerald-500/40'
-          : 'bg-slate-900/80 text-amber-400 border-amber-500/40',
-      ]"
-    >
-      <span
-        :class="[
-          'w-1.5 h-1.5 rounded-full shadow-sm',
-          video.active ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400',
-        ]"
-      ></span>
-      {{ video.active ? 'Activo' : 'Inactivo' }}
-    </span>
-  </div>
-</div>
+          <!-- Indicador visual de estado (Activo/Inactivo) -->
+          <div class="absolute top-3 right-3 z-10 pointer-events-none">
+            <span
+              :class="[
+                'px-3 py-1 rounded-full text-[10px] font-semibold flex items-center gap-1.5 shadow-md border backdrop-blur-md',
+                video.active
+                  ? 'bg-slate-900/80 text-emerald-400 border-emerald-500/40'
+                  : 'bg-slate-900/80 text-amber-400 border-amber-500/40',
+              ]"
+            >
+              <span
+                :class="[
+                  'w-1.5 h-1.5 rounded-full shadow-sm',
+                  video.active ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400',
+                ]"
+              ></span>
+              {{ video.active ? 'Activo' : 'Inactivo' }}
+            </span>
+          </div>
+        </div>
         <!-- Sección de contenido textual de la tarjeta (Título) -->
         <div class="p-4 space-y-3 flex-1 flex flex-col justify-between">
           <div class="space-y-1">

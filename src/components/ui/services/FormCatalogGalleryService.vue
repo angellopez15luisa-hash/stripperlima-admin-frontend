@@ -27,6 +27,8 @@ const isCurrentDarkMode = () => {
   return document.documentElement.classList.contains('dark')
 }
 
+const LIMIT = import.meta.env.VITE_LIMIT_SERVICES
+
 // Variable reactiva para almacenar el texto que escribe el usuario en el buscador
 const searchQuery = ref<string>('')
 // Variable reactiva para almacenar el estado seleccionado en el filtro desplegable (Todos, Activo, Inactivo)
@@ -202,6 +204,9 @@ const displayedPages = computed(() => {
 watch([searchQuery, selectedStatus], () => {
   currentPage.value = 1
 })
+
+const quantityServices = computed(()=>props.services.length)
+
 </script>
 
 <template>
@@ -210,71 +215,79 @@ watch([searchQuery, selectedStatus], () => {
     class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-colors p-6 space-y-6 relative"
   >
     <!-- Barra superior que contiene el título, descripción, buscador, filtros y botón de agregar -->
-    <div
-      class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-transparent border-b border-slate-200 dark:border-slate-800/60 pb-6"
-    >
-      <!-- Bloque de texto descriptivo del módulo -->
-      <div>
-        <h2 class="text-sm font-bold text-slate-800 dark:text-white">Catálogo de Servicios</h2>
-        <p class="text-xs text-slate-500 dark:text-slate-400">
-          Filtra, agrega o administra las tarjetas de servicios de la landing.
-        </p>
-      </div>
-
-      <!-- Contenedor para los controles interactivos de la barra superior -->
-      <div class="flex items-center gap-3 w-full md:w-auto justify-end flex-wrap">
-        <!-- Contenedor del buscador de servicios -->
-        <div class="relative w-full sm:w-64">
-          <!-- Icono de lupa posicionado de manera absoluta a la izquierda -->
-          <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
-            <font-awesome-icon icon="magnifying-glass" class="text-xs" />
-          </span>
-          <!-- Input de texto enlazado a la variable reactiva searchQuery -->
-          <input
-            type="text"
-            v-model="searchQuery"
-            placeholder="Buscar servicio..."
-            :disabled
-            class="w-full bg-slate-50 dark:bg-[#1f2937] border border-slate-200 dark:border-slate-700/60 rounded-xl pl-10 pr-4 py-2 text-xs text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors shadow-sm disabled:opacity-40 disabled:cursor-not-allowed"
-          />
+     <div
+        class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-transparent border-b border-slate-200 dark:border-slate-800/60 pb-6"
+      >
+        <!-- Bloque de texto descriptivo del módulo -->
+        <div>
+          <h2 class="text-sm font-bold text-slate-800 dark:text-white">Catálogo de Servicios</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400">
+            Filtra, agrega o administra las tarjetas de servicios de la landing.
+          </p>
         </div>
 
-        <!-- Contenedor del menú desplegable para filtrar por estado -->
-        <div class="relative w-full sm:w-44">
-          <!-- Elemento select enlazado a la variable reactiva selectedStatus -->
-          <select
-            v-model="selectedStatus"
-            :disabled
-            class="w-full bg-slate-50 dark:bg-[#1f2937] border border-slate-200 dark:border-slate-700/60 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-slate-200 focus:outline-none focus:border-emerald-500 transition-colors appearance-none cursor-pointer shadow-sm disabled:opacity-40 disabled:cursor-not-allowed"
-          >
-            <option value="Todos">Todos los estados</option>
-            <option value="Activo">Activo</option>
-            <option value="Inactivo">Inactivo</option>
-          </select>
-          <!-- Icono de flecha hacia abajo ubicado de forma absoluta a la derecha -->
-          <span
-            class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400 pointer-events-none"
-          >
-            <font-awesome-icon icon="chevron-down" class="text-xs" />
-          </span>
-        </div>
+        <!-- Contenedor para los controles interactivos de la barra superior -->
+        <div class="flex items-center gap-3 w-full md:w-auto justify-end flex-wrap">
 
-        <!-- Botón para abrir el modal de creación de un nuevo servicio -->
-        <button
-          @click="openCreateModal"
-          type="button"
-          :disabled="disabled"
-          :class="
-            !disabled
-              ? 'bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer shadow-sm'
-              : 'bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed opacity-60'
-          "
-          class="px-4 py-2 font-semibold text-xs rounded-xl transition-all flex items-center gap-2 whitespace-nowrap"
-        >
-          <font-awesome-icon icon="plus" class="text-xs" /> Nuevo Servicio
-        </button>
+          <!-- Alerta amarilla a la izquierda del buscador -->
+          <div v-if="quantityServices>=LIMIT" class="px-3 py-2 bg-amber-500/10 border border-amber-500/20 rounded-xl text-amber-600 dark:text-amber-400 text-xs font-medium flex items-center gap-1.5 whitespace-nowrap shadow-sm">
+            <font-awesome-icon icon="triangle-exclamation" class="text-xs" />
+            <span>El límite es {{ LIMIT }}</span>
+          </div>
+
+          <!-- Contenedor del buscador de servicios -->
+          <div class="relative w-full sm:w-64">
+            <!-- Icono de lupa posicionado de manera absoluta a la izquierda -->
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+              <font-awesome-icon icon="magnifying-glass" class="text-xs" />
+            </span>
+            <!-- Input de texto enlazado a la variable reactiva searchQuery -->
+            <input
+              type="text"
+              v-model="searchQuery"
+              placeholder="Buscar servicio..."
+              :disabled="disabled"
+              class="w-full bg-slate-50 dark:bg-[#1f2937] border border-slate-200 dark:border-slate-700/60 rounded-xl pl-10 pr-4 py-2 text-xs text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors shadow-sm disabled:opacity-40 disabled:cursor-not-allowed"
+            />
+          </div>
+
+          <!-- Contenedor del menú desplegable para filtrar por estado -->
+          <div class="relative w-full sm:w-44">
+            <!-- Elemento select enlazado a la variable reactiva selectedStatus -->
+            <select
+              v-model="selectedStatus"
+              :disabled="disabled"
+              class="w-full bg-slate-50 dark:bg-[#1f2937] border border-slate-200 dark:border-slate-700/60 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-slate-200 focus:outline-none focus:border-emerald-500 transition-colors appearance-none cursor-pointer shadow-sm disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              <option value="Todos">Todos los estados</option>
+              <option value="Activo">Activo</option>
+              <option value="Inactivo">Inactivo</option>
+            </select>
+            <!-- Icono de flecha hacia abajo ubicado de forma absoluta a la derecha -->
+            <span
+              class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400 pointer-events-none"
+            >
+              <font-awesome-icon icon="chevron-down" class="text-xs" />
+            </span>
+          </div>
+
+          <!-- Botón para abrir el modal de creación de un nuevo servicio -->
+          <button
+            v-if="quantityServices < LIMIT"
+            @click="openCreateModal"
+            type="button"
+            :disabled="disabled"
+            :class="
+              !disabled
+                ? 'bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer shadow-sm'
+                : 'bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed opacity-60'
+            "
+            class="px-4 py-2 font-semibold text-xs rounded-xl transition-all flex items-center gap-2 whitespace-nowrap"
+          >
+            <font-awesome-icon icon="plus" class="text-xs" /> Nuevo Servicio
+          </button>
+        </div>
       </div>
-    </div>
 
     <!-- Cuadrícula (Grid) que renderiza de forma iterativa cada tarjeta de servicio paginado -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

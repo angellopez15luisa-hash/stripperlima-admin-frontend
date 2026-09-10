@@ -22,6 +22,7 @@ const emit = defineEmits<{
 const isCurrentDarkMode = () => {
   return document.documentElement.classList.contains('dark')
 }
+const LIMIT = import.meta.env.VITE_LIMIT_PACKAGES
 
 const searchQuery = ref<string>('')
 const selectedStatus = ref<string>('Todos')
@@ -60,7 +61,10 @@ const handleCreatePackage = (newPackage: CatalogGalleryPackage) => {
   emit('create', newPackage)
 }
 
-const handleUpdatePackage = (id: CatalogGalleryPackage['id'], updatedPackage: CatalogGalleryPackage) => {
+const handleUpdatePackage = (
+  id: CatalogGalleryPackage['id'],
+  updatedPackage: CatalogGalleryPackage,
+) => {
   emit('update', id, updatedPackage)
 }
 
@@ -169,6 +173,8 @@ const displayedPages = computed(() => {
 watch([searchQuery, selectedStatus], () => {
   currentPage.value = 1
 })
+
+const quantityPackages = computed(() => props.packages.length)
 </script>
 
 <template>
@@ -187,6 +193,14 @@ watch([searchQuery, selectedStatus], () => {
       </div>
 
       <div class="flex items-center gap-3 w-full md:w-auto justify-end flex-wrap">
+        <div
+          v-if="quantityPackages >= LIMIT"
+          class="px-3 py-2 bg-amber-500/10 border border-amber-500/20 rounded-xl text-amber-600 dark:text-amber-400 text-xs font-medium flex items-center gap-1.5 whitespace-nowrap shadow-sm"
+        >
+          <font-awesome-icon icon="triangle-exclamation" class="text-xs" />
+          <span>El límite es {{ LIMIT }}</span>
+        </div>
+
         <div class="relative w-full sm:w-56">
           <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
             <font-awesome-icon icon="magnifying-glass" class="text-xs" />
@@ -218,6 +232,7 @@ watch([searchQuery, selectedStatus], () => {
         </div>
 
         <button
+          v-if="quantityPackages < LIMIT"
           @click="openCreateModal"
           type="button"
           :disabled="disabled"
@@ -265,10 +280,12 @@ watch([searchQuery, selectedStatus], () => {
           <div
             class="w-12 h-12 rounded-full bg-emerald-600/10 dark:bg-emerald-400/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shadow-sm mt-1"
           >
-          <!-- Contenedor circular perfecto con flexbox para centrar el icono -->
-<div class="w-12 h-12 rounded-full bg-emerald-500/10 dark:bg-emerald-400/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 flex-shrink-0">
-  <i :class="[pkg.icon, 'text-xl']"></i>
-</div>
+            <!-- Contenedor circular perfecto con flexbox para centrar el icono -->
+            <div
+              class="w-12 h-12 rounded-full bg-emerald-500/10 dark:bg-emerald-400/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 flex-shrink-0"
+            >
+              <i :class="[pkg.icon, 'text-xl']"></i>
+            </div>
             <!-- {{ pkg.icon }} -->
           </div>
 
@@ -283,18 +300,26 @@ watch([searchQuery, selectedStatus], () => {
           </span> -->
 
           <!-- Descripción compacta -->
-          <p class="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed px-1">
+          <p
+            class="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed px-1"
+          >
             {{ pkg.description || 'Espectáculos exclusivos adaptados a tus preferencias.' }}
           </p>
 
           <!-- Listado dinámico del arreglo pkg.features -->
-          <div class="w-full pt-3 mt-2 border-t border-slate-200/60 dark:border-slate-800/60 space-y-2 text-left">
+          <div
+            class="w-full pt-3 mt-2 border-t border-slate-200/60 dark:border-slate-800/60 space-y-2 text-left"
+          >
             <div
-              v-for="(feature, index) in (pkg.features && pkg.features.length > 0 ? pkg.features : [])"
+              v-for="(feature, index) in pkg.features && pkg.features.length > 0
+                ? pkg.features
+                : []"
               :key="index"
               class="flex items-center gap-2 text-[11px] text-slate-600 dark:text-slate-300"
             >
-              <span class="w-4 h-4 rounded-full bg-emerald-500/10 dark:bg-emerald-400/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center flex-shrink-0">
+              <span
+                class="w-4 h-4 rounded-full bg-emerald-500/10 dark:bg-emerald-400/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center flex-shrink-0"
+              >
                 <font-awesome-icon icon="check" class="text-[9px]" />
               </span>
               <span class="truncate">{{ feature }}</span>

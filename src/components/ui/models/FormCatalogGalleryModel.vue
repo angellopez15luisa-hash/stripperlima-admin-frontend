@@ -30,6 +30,8 @@ const isCurrentDarkMode = () => {
   return document.documentElement.classList.contains('dark')
 }
 
+const LIMIT = import.meta.env.VITE_LIMIT_MODELS
+
 // Variable reactiva para almacenar el texto que escribe el usuario en el buscador
 const searchQuery = ref<string>('')
 // Variable reactiva para almacenar el estado seleccionado en el filtro desplegable (Todos, Activo, Inactivo)
@@ -214,6 +216,8 @@ const displayedPages = computed(() => {
 watch([searchQuery, selectedStatus, selectedCategory], () => {
   currentPage.value = 1
 })
+
+const quantityModels = computed(() => props.models.length)
 </script>
 
 <template>
@@ -235,6 +239,13 @@ watch([searchQuery, selectedStatus, selectedCategory], () => {
 
       <!-- Contenedor para los controles interactivos de la barra superior -->
       <div class="flex items-center gap-3 w-full md:w-auto justify-end flex-wrap">
+        <div
+          v-if="quantityModels >= LIMIT"
+          class="px-3 py-2 bg-amber-500/10 border border-amber-500/20 rounded-xl text-amber-600 dark:text-amber-400 text-xs font-medium flex items-center gap-1.5 whitespace-nowrap shadow-sm"
+        >
+          <font-awesome-icon icon="triangle-exclamation" class="text-xs" />
+          <span>El límite es {{ LIMIT }}</span>
+        </div>
         <!-- Contenedor del buscador de servicios -->
         <div class="relative w-full sm:w-56">
           <!-- Icono de lupa posicionado de manera absoluta a la izquierda -->
@@ -290,6 +301,7 @@ watch([searchQuery, selectedStatus, selectedCategory], () => {
 
         <!-- Botón para abrir el modal de creación de un nuevo servicio -->
         <button
+          v-if="quantityModels < LIMIT"
           @click="openCreateModal"
           type="button"
           :disabled="disabled"
