@@ -47,6 +47,7 @@ const { data: generalSetting } = useQuery({
   queryKey: ['general-settings'],
   queryFn: () => GeneralSettingAction.getData(),
   retry: false,
+  refetchOnWindowFocus: false,
 })
 
 // Configuración del formulario reactivo con VeeValidate y Zod
@@ -101,7 +102,8 @@ const toggleEdit = async () => {
         {
           values: {
             titleHeaderGalleryEvents: generalSetting.value.titleHeaderGalleryEvents || '',
-            descriptionHeaderGalleryEvents: generalSetting.value.descriptionHeaderGalleryEvents || '',
+            descriptionHeaderGalleryEvents:
+              generalSetting.value.descriptionHeaderGalleryEvents || '',
             catalogGalleryEvents: generalSetting.value.catalogGalleryEvents || [],
           },
         },
@@ -218,7 +220,8 @@ const disabled = computed(() => !meta.value.valid || isPending.value || !isEditi
     <HeaderTitlesSlot>
       <template #title>Mantenimiento de Sección Eventos</template>
       <template #description>
-        Personaliza el título principal, descripción y gestiona el catálogo de eventos del sitio web.
+        Personaliza el título principal, descripción y gestiona el catálogo de eventos del sitio
+        web.
       </template>
       <template #button>
         <button
@@ -280,8 +283,19 @@ const disabled = computed(() => !meta.value.valid || isPending.value || !isEditi
 
           <!-- Spinner de carga activo durante la mutación -->
           <svg v-else class="animate-spin h-3.5 w-3.5 text-white" viewBox="0 0 24 24" fill="none">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
           </svg>
 
           <!-- Texto dinámico del botón -->

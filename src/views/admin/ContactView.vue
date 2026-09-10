@@ -1,3 +1,4 @@
+<!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
 import { GeneralSettingAction } from '@/business/actions'
 import ContainerButtonMainSlot from '@/components/slots/ContainerButtonMainSlot.vue'
@@ -25,6 +26,7 @@ const { data: generalSetting } = useQuery({
   queryKey: ['general-settings'],
   queryFn: () => GeneralSettingAction.getData(),
   retry: false,
+  refetchOnWindowFocus: false,
 })
 
 const { defineField, resetForm, errors, handleSubmit, meta } = useForm({
@@ -69,12 +71,12 @@ watch(
   (newData) => {
     if (newData) {
       resetForm({
-        // values: {
-        //   titleHeaderContact: newData.titleHeaderContact || '',
-        //   descriptionHeaderContact: newData.descriptionHeaderContact || '',
-        //   informationContact: newData.informationContact || {},
-        // },
-        values: { ...newData },
+        values: {
+          titleHeaderContact: newData.titleHeaderContact || '',
+          descriptionHeaderContact: newData.descriptionHeaderContact || '',
+          informationContact: newData.informationContact || {},
+        },
+        // values: { ...newData },
       })
     }
   },

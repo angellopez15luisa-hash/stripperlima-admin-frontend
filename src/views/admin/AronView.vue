@@ -30,6 +30,7 @@ const { data: generalSetting } = useQuery({
   queryKey: ['general-settings'],
   queryFn: () => GeneralSettingAction.getData(),
   retry: false,
+  refetchOnWindowFocus: false,
 })
 
 const { defineField, resetForm, errors, handleSubmit, meta } = useForm({
@@ -116,7 +117,7 @@ const toggleEdit = async () => {
 }
 const onSubmit = handleSubmit((values) => {
   if (!isEditing.value) return
- console.log(values)
+  console.log(values)
   const { id, ...data } = values
   mutate({ id, data })
 })

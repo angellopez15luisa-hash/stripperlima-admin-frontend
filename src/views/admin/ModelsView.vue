@@ -47,6 +47,7 @@ const { data: generalSetting } = useQuery({
   queryKey: ['general-settings'],
   queryFn: () => GeneralSettingAction.getData(),
   retry: false,
+  refetchOnWindowFocus: false
 })
 
 // Configuración del formulario reactivo con VeeValidate y Zod
@@ -163,11 +164,26 @@ function handleGlobalDelete(id: CatalogGalleryModel['id']) {
   })
 }
 
+watch(generalSetting, (value) => {
+  console.log(value?.catalogGalleryModels)
+}, {
+  deep: true,
+  immediate:true
+})
+
+watch(catalogGalleryList, (value) => {
+  console.log(value)
+}, {
+  deep: true,
+  immediate:true
+})
+
 // Envío del formulario principal
 const onSubmit = () => {
   if (!isEditing.value) return
-  console.log(descriptionHeader.value)
-
+  // console.log(descriptionHeader.value)
+console.log(generalSetting.value?.catalogGalleryModels)
+ console.log(catalogGalleryList.value)
   mutate({
     id: generalSetting.value?.id,
     data: {

@@ -45,6 +45,7 @@ const { data: generalSetting } = useQuery({
   queryKey: ['general-settings'],
   queryFn: () => GeneralSettingAction.getData(),
   retry: false,
+  refetchOnWindowFocus: false,
 })
 
 // Inicializa el hook useForm de VeeValidate con el esquema de validación y valores por defecto

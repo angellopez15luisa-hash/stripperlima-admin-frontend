@@ -30,6 +30,7 @@ const { data: generalSetting } = useQuery({
   queryKey: ['general-settings'],
   queryFn: () => GeneralSettingAction.getData(),
   retry: false,
+  refetchOnWindowFocus: false,
 })
 
 const { defineField, resetForm, errors, handleSubmit, meta, validate } = useForm({
