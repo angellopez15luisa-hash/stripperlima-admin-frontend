@@ -205,7 +205,9 @@ watch([searchQuery, selectedStatus], () => {
   currentPage.value = 1
 })
 
-const quantityServices = computed(()=>props.services.length)
+const quantityServices = computed(() => props.services.length)
+
+
 
 </script>
 

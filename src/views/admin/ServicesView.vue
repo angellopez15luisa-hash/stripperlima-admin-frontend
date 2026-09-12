@@ -1,7 +1,7 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
 // Importa las funciones y hooks esenciales de Vue
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch, } from 'vue';
 // Importa el componente hijo encargado de mostrar y editar la cabecera con textos
 import FormTextHeader from '@/components/ui/shared/FormTextHeader.vue'
 // Importa el componente hijo encargado de listar y gestionar el catálogo de servicios en la galería
@@ -94,6 +94,8 @@ const { mutate, isPending } = useMutation({
   },
 })
 
+
+
 // Función personalizada que maneja el envío directo de los datos al backend sin bloqueos de Zod
 const onSubmit = () => {
   // Si no está habilitado el modo edición, detiene la ejecución inmediatamente
@@ -112,6 +114,11 @@ const onSubmit = () => {
     descriptionHeaderServices: currentDesc,
     catalogGalleryServices: catalogGalleryList.value,
   })
+
+  console.log(catalogGalleryList.value)
+  
+
+
 
   // Dispara la mutación hacia el servidor con la estructura requerida
   mutate({
@@ -237,6 +244,14 @@ const handleGlobalDelete = (id: number) => {
 //   return false
 // })
 const disabled = computed(() => !meta.value.valid || isPending.value || !isEditing.value)
+
+
+// watch(catalogGalleryList.value, value => {
+//  console.log(toRaw(value))
+// }, {
+//   deep: true,
+//   immediate:true
+// })
 </script>
 
 <template>
