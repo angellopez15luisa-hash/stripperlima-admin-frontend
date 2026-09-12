@@ -69,14 +69,14 @@ const disabled = computed(() => !props.isEditing)
         >
         <div class="relative">
           <span
-            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-emerald-500 dark:text-emerald-400"
+            class="absolute top-3 left-3 pointer-events-none text-emerald-500 dark:text-emerald-400"
           >
             <i class="ri-phone-line text-base"></i>
           </span>
-          <input
+          <textarea
             :disabled
             v-model="phone"
-            type="text"
+            rows="2"
             placeholder="Ej. +51 929 720 720"
             class="w-full pl-10 pr-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition disabled:opacity-60 disabled:cursor-not-allowed"
           />
